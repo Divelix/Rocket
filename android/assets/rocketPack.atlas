@@ -1,0 +1,47 @@
+
+rocketPack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+yellowRocket
+  rotate: false
+  xy: 2, 262
+  size: 111, 128
+  orig: 111, 128
+  offset: 0, 0
+  index: -1
+smallRocket
+  rotate: false
+  xy: 2, 132
+  size: 101, 128
+  orig: 101, 128
+  offset: 0, 0
+  index: -1
+shattleRocket
+  rotate: false
+  xy: 115, 262
+  size: 91, 128
+  orig: 91, 128
+  offset: 0, 0
+  index: -1
+rocket
+  rotate: false
+  xy: 2, 2
+  size: 90, 128
+  orig: 90, 128
+  offset: 0, 0
+  index: -1
+doubleGreenRocket
+  rotate: false
+  xy: 105, 132
+  size: 62, 128
+  orig: 62, 128
+  offset: 0, 0
+  index: -1
+greenRocket
+  rotate: false
+  xy: 94, 2
+  size: 54, 128
+  orig: 54, 128
+  offset: 0, 0
+  index: -1

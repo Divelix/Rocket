@@ -1,0 +1,89 @@
+
+gamePack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+landscape
+  rotate: false
+  xy: 2, 83
+  size: 480, 425
+  orig: 480, 425
+  offset: 0, 0
+  index: -1
+cloud1
+  rotate: false
+  xy: 2, 2
+  size: 199, 79
+  orig: 199, 79
+  offset: 0, 0
+  index: -1
+cloud7
+  rotate: false
+  xy: 484, 449
+  size: 207, 59
+  orig: 207, 59
+  offset: 0, 0
+  index: -1
+cloud0
+  rotate: false
+  xy: 203, 23
+  size: 207, 58
+  orig: 207, 58
+  offset: 0, 0
+  index: -1
+star
+  rotate: false
+  xy: 484, 319
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+cloud5
+  rotate: false
+  xy: 693, 446
+  size: 193, 62
+  orig: 193, 62
+  offset: 0, 0
+  index: -1
+cloud8
+  rotate: false
+  xy: 484, 243
+  size: 163, 74
+  orig: 163, 74
+  offset: 0, 0
+  index: -1
+cloud2
+  rotate: false
+  xy: 484, 168
+  size: 163, 73
+  orig: 163, 73
+  offset: 0, 0
+  index: -1
+cloud9
+  rotate: false
+  xy: 484, 97
+  size: 163, 69
+  orig: 163, 69
+  offset: 0, 0
+  index: -1
+cloud3
+  rotate: false
+  xy: 484, 24
+  size: 152, 71
+  orig: 152, 71
+  offset: 0, 0
+  index: -1
+cloud6
+  rotate: false
+  xy: 614, 374
+  size: 150, 70
+  orig: 150, 70
+  offset: 0, 0
+  index: -1
+cloud4
+  rotate: false
+  xy: 766, 379
+  size: 152, 65
+  orig: 152, 65
+  offset: 0, 0
+  index: -1
