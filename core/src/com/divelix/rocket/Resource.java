@@ -80,7 +80,7 @@ public class Resource {
         cloud8 = new TextureRegion(gamePack.findRegion("cloud8"));
         cloud9 = new TextureRegion(gamePack.findRegion("cloud9"));
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("AGRevueCyrRoman.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/AGRevueCyrRoman.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
         params.size = 24;
         font = generator.generateFont(params);
