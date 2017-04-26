@@ -86,7 +86,7 @@ public class MenuScreen implements Screen {
 
         star = new Image(Resource.star);
         star.setBounds(200, 150, 50, 50);
-        starsCountLabel = new Label("" + starsCount, new Label.LabelStyle(Resource.font, Color.YELLOW));
+        starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.font, Color.YELLOW));
         starsCountLabel.setPosition(250, 155);
 
         shopBtn = new ImageButton(shopBtnUpImg.getDrawable(), shopBtnDownImg.getDrawable());

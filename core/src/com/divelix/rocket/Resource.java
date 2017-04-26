@@ -17,7 +17,7 @@ public class Resource {
     private static TextureAtlas gamePack;
     public static TextureRegion landscape,
             rocket, doubleGreenRocket, greenRocket, shuttleRocket, smallRocket, yellowRocket,
-            cellBg,
+            cellBg, topBar,
             star,
             playBtnUp, playBtnDown, rateBtnUp, rateBtnDown, leadBtnUp, leadBtnDown, adsBtnUp, adsBtnDown, shopBtnUp, shopBtnDown, pauseOnBtn, pauseOffBtn,
             rocketLogo,
@@ -64,6 +64,7 @@ public class Resource {
         rockets.add(yellowRocket);
 
         cellBg = new TextureRegion(uiPack.findRegion("cellBg"));
+        topBar = new TextureRegion(uiPack.findRegion("topBar"));
 
         rocketLogo = new TextureRegion(uiPack.findRegion("rocketSpaceLogo"));
 
