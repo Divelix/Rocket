@@ -2,9 +2,6 @@
   com.badlogic.gdx.graphics.Color: {
     white:  { hex: ffffffff },
     black:  { hex: 000000ff },
-    yellow: { hex: f0cf1aff }
-  },
-  com.badlogic.gdx.graphics.g2d.BitmapFont: {
-    AGRevueCyrRoman: { file: AGRevueCyrRoman.fnt }
-  },
+    yellow: { hex: f0cf1aff },
+  }
 }

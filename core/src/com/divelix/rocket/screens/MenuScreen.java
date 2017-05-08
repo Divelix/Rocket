@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.Main;
@@ -32,16 +33,10 @@ public class MenuScreen implements Screen {
     private Game game;
     private Viewport view;
     private Stage stage;
-    private Table table;
-    private Image logo, playBtnUpImg, playBtnDownImg, shopBtnUpImg, shopBtnDownImg, star;
-    private float aspectRatio;
-    private ImageButton playBtn, shopBtn;
-    private Label bestScoreLabel, starsCountLabel;
-    private Preferences pref;
 
     public MenuScreen(Game game) {
         this.game = game;
-        pref = Gdx.app.getPreferences("com.divelix.rocket");
+        Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
         try {
             bestScore = pref.getInteger("bestScore");
             System.out.println("Best score: " + bestScore);
@@ -65,17 +60,17 @@ public class MenuScreen implements Screen {
     public void show() {
         System.out.println("Show method!");
 
-        bestScoreLabel = new Label("Best Score: " + bestScore, new Label.LabelStyle(Resource.font, Color.RED));
+        Label bestScoreLabel = new Label("Best Score: " + bestScore, new Label.LabelStyle(Resource.font, Color.RED));
 
-        logo = new Image(Resource.rocketLogo);
-        aspectRatio = logo.getHeight()/logo.getWidth();
+        Image logo = new Image(Resource.rocketLogo);
+        float aspectRatio = logo.getHeight()/logo.getWidth();
         logo.setBounds(Main.WIDTH/2 - LOGO_WIDTH /2, Main.HEIGHT - LOGO_WIDTH *aspectRatio*2, LOGO_WIDTH, LOGO_WIDTH *aspectRatio);
-        playBtnUpImg = new Image(Resource.playBtnUp);
-        playBtnDownImg = new Image(Resource.playBtnDown);
-        shopBtnUpImg = new Image(Resource.shopBtnUp);
-        shopBtnDownImg = new Image(Resource.shopBtnDown);
+        Image playBtnUpImg = new Image(Resource.playBtnUp);
+        Image playBtnDownImg = new Image(Resource.playBtnDown);
+        Image shopBtnUpImg = new Image(Resource.shopBtnUp);
+        Image shopBtnDownImg = new Image(Resource.shopBtnDown);
 
-        playBtn = new ImageButton(playBtnUpImg.getDrawable(), playBtnDownImg.getDrawable());
+        ImageButton playBtn = new ImageButton(playBtnUpImg.getDrawable(), playBtnDownImg.getDrawable());
         playBtn.setBounds(Main.WIDTH / 2 - PLAY_BTN_SIZE / 2, Main.HEIGHT / 2.5f - PLAY_BTN_SIZE / 2, PLAY_BTN_SIZE, PLAY_BTN_SIZE);
         playBtn.addListener(new ClickListener() {
             @Override
@@ -84,12 +79,12 @@ public class MenuScreen implements Screen {
             }
         });
 
-        star = new Image(Resource.star);
+        Image star = new Image(Resource.star);
         star.setBounds(200, 150, 50, 50);
-        starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.font, Color.YELLOW));
+        Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.font, Color.YELLOW));
         starsCountLabel.setPosition(250, 155);
 
-        shopBtn = new ImageButton(shopBtnUpImg.getDrawable(), shopBtnDownImg.getDrawable());
+        ImageButton shopBtn = new ImageButton(shopBtnUpImg.getDrawable(), shopBtnDownImg.getDrawable());
         shopBtn.setBounds(50, 50, MENU_BTN_SIZE, MENU_BTN_SIZE);
         shopBtn.addListener(new ClickListener() {
             @Override
@@ -98,12 +93,12 @@ public class MenuScreen implements Screen {
             }
         });
 
-        table = new Table();
+        Table table = new Table();
         table.top();
         table.setFillParent(true);
         table.add(bestScoreLabel).expandX().padTop(300);
 
-        view = new FillViewport(Main.WIDTH, Main.HEIGHT);
+        view = new ExtendViewport(Main.WIDTH, Main.HEIGHT);
         stage = new Stage(view);
         stage.addActor(logo);
         stage.addActor(table);

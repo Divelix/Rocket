@@ -17,19 +17,16 @@ import com.divelix.rocket.screens.ShopScreen;
 
 public class ShopCell extends Group {
 
-    private final float WIDTH = 100;
-    private final float HEIGHT = 150;
-    private Image rocket, cellBg;
-    private Label label;
-
     public ShopCell(TextureRegion rocketImg, int price) {
+        final float WIDTH = 100;
+        final float HEIGHT = 150;
         super.setSize(WIDTH, HEIGHT);
-        cellBg = new Image(Resource.cellBg);
+        final Image cellBg = new Image(Resource.cellBg);
         cellBg.setSize(WIDTH, HEIGHT);
-        rocket = new Image(rocketImg);
+        Image rocket = new Image(rocketImg);
         float aspectRatio = rocket.getWidth()/rocket.getHeight();
         rocket.setBounds(cellBg.getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), cellBg.getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
-        label = new Label(String.valueOf(price), new Label.LabelStyle(Resource.font, Color.YELLOW));
+        final Label label = new Label(String.valueOf(price), new Label.LabelStyle(Resource.font, Color.YELLOW));
         label.setPosition(cellBg.getX() + WIDTH/2 - label.getWidth()/2, cellBg.getY() + HEIGHT/15);
         super.addActor(cellBg);
         super.addActor(rocket);
@@ -40,7 +37,12 @@ public class ShopCell extends Group {
         super.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ShopScreen.game.setScreen(new MenuScreen(ShopScreen.game));
+//                label.setText("sold");
+//                label.setStyle(new Label.LabelStyle(Resource.font, Color.GREEN));
+                ShopCell.super.removeActor(label);
+                Label newLabel = new Label("sold", new Label.LabelStyle(Resource.font, Color.GREEN));
+                newLabel.setPosition(cellBg.getX() + WIDTH/2 - newLabel.getWidth()/2, cellBg.getY() + HEIGHT/15);
+                addActor(newLabel);
             }
         });
     }

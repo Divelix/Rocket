@@ -1,5 +1,5 @@
 
-uiPack.png
+skin.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -24,23 +24,30 @@ btnUp
   orig: 512, 512
   offset: 0, 0
   index: -1
-topBar
-  rotate: false
-  xy: 1, 107
-  size: 480, 150
-  orig: 480, 150
-  offset: 0, 0
-  index: -1
 adsBtnDown
   rotate: false
-  xy: 483, 1
+  xy: 1, 1
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 adsBtnUp
   rotate: false
-  xy: 741, 1
+  xy: 259, 1
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+leadBtnDown
+  rotate: false
+  xy: 517, 1
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+leadBtnUp
+  rotate: false
+  xy: 775, 1
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -52,65 +59,51 @@ cellBg
   orig: 256, 384
   offset: 0, 0
   index: -1
-leadBtnDown
+rateBtnDown
   rotate: false
   xy: 1029, 369
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-leadBtnUp
+backArrow
   rotate: false
-  xy: 1287, 755
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-rateBtnDown
-  rotate: false
-  xy: 1287, 497
-  size: 256, 256
-  orig: 256, 256
+  xy: 1287, 551
+  size: 102, 460
+  orig: 102, 460
   offset: 0, 0
   index: -1
 rateBtnUp
   rotate: false
-  xy: 1545, 755
+  xy: 1391, 755
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shopBtnDown
   rotate: false
-  xy: 1545, 497
+  xy: 1649, 755
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shopBtnUp
   rotate: false
-  xy: 1287, 239
+  xy: 1391, 497
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-backArrow
-  rotate: false
-  xy: 1803, 755
-  size: 55, 256
-  orig: 55, 256
-  offset: 0, 0
-  index: -1
 pauseOff
   rotate: false
-  xy: 1, 55
+  xy: 1029, 317
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 pauseOn
   rotate: false
-  xy: 1029, 317
+  xy: 1907, 961
   size: 50, 50
   orig: 50, 50
   offset: 0, 0

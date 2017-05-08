@@ -8,15 +8,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.Main;
@@ -33,13 +39,6 @@ public class ShopScreen implements Screen {
     public static Game game;
     private Viewport view;
     private Stage stage;
-    private Table table;
-    private ScrollPane scrollPane;
-    private Image topBar;
-    private Preferences pref;
-    public static int starsCount;
-    private Label starText;
-    private Image starImg;
 
     public ShopScreen(Game game) {
         this.game = game;
@@ -47,10 +46,11 @@ public class ShopScreen implements Screen {
 
     @Override
     public void show() {
-        view = new FillViewport(Main.WIDTH, Main.HEIGHT);
+        view = new ExtendViewport(Main.WIDTH, Main.HEIGHT);
         stage = new Stage(view);
         Gdx.input.setInputProcessor(stage);
-        pref = Gdx.app.getPreferences("com.divelix.rocket");
+        Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
+        int starsCount;
         try {
             starsCount = pref.getInteger("stars");
             System.out.println("Stars: " + starsCount);
@@ -59,21 +59,27 @@ public class ShopScreen implements Screen {
             starsCount = 0;
             System.out.println("Stars: 0");
         }
-        topBar = new Image(Resource.topBar);
-        topBar.setPosition(0, 650);
-        starImg = new Image(Resource.star);
+        //Back button
+//        final int BACK_ARROW_HEIGHT = 100;
+//        Image backArrowImg = new Image(Resource.backArrow);
+//        ImageButton backBtn = new ImageButton(backArrowImg.getDrawable(), backArrowImg.getDrawable());
+//        float aspectRatio = backArrowImg.getWidth()/backArrowImg.getHeight();
+//        backBtn.setSize(BACK_ARROW_HEIGHT*aspectRatio, BACK_ARROW_HEIGHT);
+//        backBtn.setPosition(50, Main.HEIGHT-BACK_ARROW_HEIGHT);
+        BackButton backBtn = new BackButton();
+        backBtn.setPosition(0, Main.HEIGHT-70);
+        //Star image and count
+        Image starImg = new Image(Resource.star);
         starImg.setBounds(Main.WIDTH/2 - 50, 600, 50, 50);
-        starText = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.font, Color.YELLOW));
+        Label starText = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.font, Color.YELLOW));
         starText.setPosition(Main.WIDTH/2, 600);
-        table = new Table();
+        //Shop as a scrollable table
+        Table table = new Table();
         table.setSize(Main.WIDTH - Main.WIDTH/10, Main.HEIGHT - 200);
-//        table.align(Align.center|Align.top);
         table.setPosition(Main.WIDTH/20, 0);
-//        table.setDebug(true);
 
-        Array<TextureRegion> rockets = Resource.rockets;
-        for (int i = 1; i <= rockets.size; i++) {
-            table.add(new ShopCell(rockets.get(i-1), 300)).width(100).pad(10);
+        for (int i = 1; i <= Resource.rockets.size; i++) {
+            table.add(new ShopCell(Resource.rockets.getKeyAt(i-1), Resource.rockets.getValueAt(i-1))).width(100).pad(15);
             if(i % 3 == 0) table.row();
         }
 
@@ -93,14 +99,14 @@ public class ShopScreen implements Screen {
 //        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
 //        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
 
-        scrollPane = new ScrollPane(table);
-        scrollPane.debugAll();
+        ScrollPane scrollPane = new ScrollPane(table);
+        scrollPane.debugAll();//TODO delete later
         scrollPane.setSize(table.getWidth(), table.getHeight());
         scrollPane.setPosition(table.getX(), table.getY());
 
+        stage.addActor(backBtn);
         stage.addActor(starImg);
         stage.addActor(starText);
-        stage.addActor(topBar);
         stage.addActor(scrollPane);
     }
 
@@ -136,5 +142,29 @@ public class ShopScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public class BackButton extends Group {
+        public BackButton() {
+            Image arrow = new Image(Resource.backArrow);
+            float aspectRatio = arrow.getWidth()/arrow.getHeight();
+            int arrowHeight = 50;
+            arrow.setSize(arrowHeight*aspectRatio, arrowHeight);
+            Label text = new Label("BACK", new Label.LabelStyle(Resource.robotoThinFont, Color.WHITE));
+            text.setX(arrow.getX() + arrow.getWidth());
+            super.addActor(arrow);
+            super.addActor(text);
+            super.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.setScreen(new MenuScreen(game));
+                        }
+                    })));
+                }
+            });
+        }
     }
 }

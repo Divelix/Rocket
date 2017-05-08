@@ -39,16 +39,12 @@ public class PlayScreen implements Screen, GestureDetector.GestureListener {
     private static boolean pause = false;
     private static Game game;
     public static OrthographicCamera camera;
-    private GestureDetector gestureDetector;
-    private Viewport view;
     private SpriteBatch batch;
+    private Viewport view;
     private Stage stage;
-    private Table table;
-    private Image landscape, pauseBtn;
+    private Image pauseBtn;
     private Label scoreLabel;
     public static Rocket rocket;
-    private Cloud cloud1, cloud2, cloud3;
-    private Star star1, star2, star3;
     private float reducer = 1, dimmer = 1;
     private float scoreHeight;
 
@@ -65,10 +61,10 @@ public class PlayScreen implements Screen, GestureDetector.GestureListener {
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
         view = new FillViewport(Main.WIDTH, Main.HEIGHT, camera);
         stage = new Stage(view, batch);
-        gestureDetector = new GestureDetector(this);
+        GestureDetector gestureDetector = new GestureDetector(this);
         Gdx.input.setInputProcessor(gestureDetector);
 
-        landscape = new Image(new TextureRegion(Resource.landscape));
+        Image landscape = new Image(new TextureRegion(Resource.landscape));
         scoreLabel = new Label("Score: " + score, new Label.LabelStyle(Resource.font, Color.RED));
         scoreHeight = camera.position.y + 320;
         scoreLabel.setPosition(0, scoreHeight);
@@ -81,12 +77,12 @@ public class PlayScreen implements Screen, GestureDetector.GestureListener {
         pauseBtn.setBounds(Main.WIDTH - PAUSE_BTN_SIZE, scoreHeight, PAUSE_BTN_SIZE, PAUSE_BTN_SIZE);
 
         rocket = new Rocket();
-        cloud1 = new Cloud(DISTANCE);
-        cloud2 = new Cloud(DISTANCE * 2);
-        cloud3 = new Cloud(DISTANCE * 3);
-        star1 = new Star(Main.WIDTH/2, DISTANCE * 1.5f);
-        star2 = new Star(Main.WIDTH/2, DISTANCE * 2.5f);
-        star3 = new Star(Main.WIDTH/2, DISTANCE * 3.5f);
+        Cloud cloud1 = new Cloud(DISTANCE);
+        Cloud cloud2 = new Cloud(DISTANCE * 2);
+        Cloud cloud3 = new Cloud(DISTANCE * 3);
+        Star star1 = new Star(Main.WIDTH/2, DISTANCE * 1.5f);
+        Star star2 = new Star(Main.WIDTH/2, DISTANCE * 2.5f);
+        Star star3 = new Star(Main.WIDTH/2, DISTANCE * 3.5f);
 
         stage.addActor(landscape);
         stage.addActor(rocket);
@@ -126,7 +122,8 @@ public class PlayScreen implements Screen, GestureDetector.GestureListener {
 
     @Override
     public void resize(int width, int height) {
-
+        Gdx.app.log("RocketLogs", "PlayScreen - resize");
+        view.update(width, height, false);
     }
 
     @Override
@@ -169,8 +166,7 @@ public class PlayScreen implements Screen, GestureDetector.GestureListener {
 
     public static void gameOver() {
         rocket.setMaxHeight(0);
-        Preferences pref;
-        pref = Gdx.app.getPreferences("com.divelix.rocket");
+        Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
         bestScore = pref.getInteger("bestScore");
         if(bestScore < score) {
             pref.putInteger("bestScore", score);

@@ -5,50 +5,55 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 
 /**
  * Created by Sergei Sergienko on 07.02.2017.
  */
 
 public class Resource {
-    private static TextureAtlas uiPack;
+    private static TextureAtlas skinPack;
     private static TextureAtlas rocketPack;
     private static TextureAtlas gamePack;
     public static TextureRegion landscape,
             rocket, doubleGreenRocket, greenRocket, shuttleRocket, smallRocket, yellowRocket,
-            cellBg, topBar,
+            cellBg,
             star,
-            playBtnUp, playBtnDown, rateBtnUp, rateBtnDown, leadBtnUp, leadBtnDown, adsBtnUp, adsBtnDown, shopBtnUp, shopBtnDown, pauseOnBtn, pauseOffBtn,
+            playBtnUp, playBtnDown, rateBtnUp, rateBtnDown, leadBtnUp, leadBtnDown, adsBtnUp, adsBtnDown, shopBtnUp, shopBtnDown, pauseOnBtn, pauseOffBtn, backArrow,
             rocketLogo,
             cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9;
-    public static BitmapFont font;
-    public static Array<TextureRegion> rockets = new Array<TextureRegion>();
+    public static BitmapFont font, robotoThinFont;
+    public static Array<TextureRegion> rockets2 = new Array<TextureRegion>();
+    public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
 
     public static void load() {
-        uiPack = new TextureAtlas("uiPack.atlas");
+        skinPack = new TextureAtlas("skin.atlas");
         rocketPack = new TextureAtlas("rocketPack.atlas");
         gamePack = new TextureAtlas("gamePack.atlas");
 
         landscape = new TextureRegion(gamePack.findRegion("landscape"));
 
-        playBtnUp = new TextureRegion(uiPack.findRegion("btnUp"));
-        playBtnDown = new TextureRegion(uiPack.findRegion("btnDown"));
+        playBtnUp = new TextureRegion(skinPack.findRegion("btnUp"));
+        playBtnDown = new TextureRegion(skinPack.findRegion("btnDown"));
 
-        adsBtnUp = new TextureRegion(uiPack.findRegion("adsBtnUp"));
-        adsBtnDown = new TextureRegion(uiPack.findRegion("adsBtnDown"));
+        adsBtnUp = new TextureRegion(skinPack.findRegion("adsBtnUp"));
+        adsBtnDown = new TextureRegion(skinPack.findRegion("adsBtnDown"));
 
-        shopBtnUp = new TextureRegion(uiPack.findRegion("shopBtnUp"));
-        shopBtnDown = new TextureRegion(uiPack.findRegion("shopBtnDown"));
+        shopBtnUp = new TextureRegion(skinPack.findRegion("shopBtnUp"));
+        shopBtnDown = new TextureRegion(skinPack.findRegion("shopBtnDown"));
 
-        leadBtnUp = new TextureRegion(uiPack.findRegion("leadBtnUp"));
-        leadBtnDown = new TextureRegion(uiPack.findRegion("leadBtnDown"));
+        leadBtnUp = new TextureRegion(skinPack.findRegion("leadBtnUp"));
+        leadBtnDown = new TextureRegion(skinPack.findRegion("leadBtnDown"));
 
-        rateBtnUp = new TextureRegion(uiPack.findRegion("rateBtnUp"));
-        rateBtnDown = new TextureRegion(uiPack.findRegion("rateBtnDown"));
+        rateBtnUp = new TextureRegion(skinPack.findRegion("rateBtnUp"));
+        rateBtnDown = new TextureRegion(skinPack.findRegion("rateBtnDown"));
 
-        pauseOnBtn = new TextureRegion(uiPack.findRegion("pauseOn"));
-        pauseOffBtn = new TextureRegion(uiPack.findRegion("pauseOff"));
+        pauseOnBtn = new TextureRegion(skinPack.findRegion("pauseOn"));
+        pauseOffBtn = new TextureRegion(skinPack.findRegion("pauseOff"));
+
+        backArrow = new TextureRegion(skinPack.findRegion("backArrow"));
 
         rocket = new TextureRegion(rocketPack.findRegion("rocket"));
         doubleGreenRocket = new TextureRegion(rocketPack.findRegion("doubleGreenRocket"));
@@ -56,17 +61,16 @@ public class Resource {
         shuttleRocket = new TextureRegion(rocketPack.findRegion("shattleRocket"));
         smallRocket = new TextureRegion(rocketPack.findRegion("smallRocket"));
         yellowRocket = new TextureRegion(rocketPack.findRegion("yellowRocket"));
-        rockets.add(rocket);
-        rockets.add(doubleGreenRocket);
-        rockets.add(greenRocket);
-        rockets.add(shuttleRocket);
-        rockets.add(smallRocket);
-        rockets.add(yellowRocket);
+        rockets.put(rocket, 100);
+        rockets.put(doubleGreenRocket, 200);
+        rockets.put(greenRocket, 300);
+        rockets.put(shuttleRocket, 400);
+        rockets.put(smallRocket, 500);
+        rockets.put(yellowRocket, 600);
 
-        cellBg = new TextureRegion(uiPack.findRegion("cellBg"));
-        topBar = new TextureRegion(uiPack.findRegion("topBar"));
+        cellBg = new TextureRegion(skinPack.findRegion("cellBg"));
 
-        rocketLogo = new TextureRegion(uiPack.findRegion("rocketSpaceLogo"));
+        rocketLogo = new TextureRegion(skinPack.findRegion("rocketSpaceLogo"));
 
         star = new TextureRegion(gamePack.findRegion("star"));
 
@@ -81,14 +85,17 @@ public class Resource {
         cloud8 = new TextureRegion(gamePack.findRegion("cloud8"));
         cloud9 = new TextureRegion(gamePack.findRegion("cloud9"));
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/AGRevueCyrRoman.ttf"));
+        FreeTypeFontGenerator generatorDef = new FreeTypeFontGenerator(Gdx.files.internal("fonts/AGRevueCyrRoman.ttf"));
+        FreeTypeFontGenerator generatorRobotoThin = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Thin.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
         params.size = 24;
-        font = generator.generateFont(params);
+        font = generatorDef.generateFont(params);
+        params.size = 50;
+        robotoThinFont = generatorRobotoThin.generateFont(params);
     }
     public static void dispose() {
         gamePack.dispose();
         rocketPack.dispose();
-        uiPack.dispose();
+        skinPack.dispose();
     }
 }
