@@ -3,25 +3,32 @@ skin.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-rocketSpaceLogo
-  rotate: false
-  xy: 1, 773
-  size: 1024, 238
-  orig: 1024, 238
-  offset: 0, 0
-  index: -1
 btnDown
   rotate: false
-  xy: 1, 259
+  xy: 1, 467
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 btnUp
   rotate: false
-  xy: 515, 259
+  xy: 515, 467
   size: 512, 512
   orig: 512, 512
+  offset: 0, 0
+  index: -1
+rocketLogo
+  rotate: false
+  xy: 1, 259
+  size: 800, 206
+  orig: 800, 206
+  offset: 0, 0
+  index: -1
+cellBg
+  rotate: false
+  xy: 1029, 595
+  size: 256, 384
+  orig: 256, 384
   offset: 0, 0
   index: -1
 adsBtnDown
@@ -33,77 +40,70 @@ adsBtnDown
   index: -1
 adsBtnUp
   rotate: false
-  xy: 259, 1
+  xy: 1287, 723
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 leadBtnDown
   rotate: false
-  xy: 517, 1
+  xy: 259, 1
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 leadBtnUp
   rotate: false
-  xy: 775, 1
+  xy: 1545, 723
   size: 256, 256
   orig: 256, 256
-  offset: 0, 0
-  index: -1
-cellBg
-  rotate: false
-  xy: 1029, 627
-  size: 256, 384
-  orig: 256, 384
   offset: 0, 0
   index: -1
 rateBtnDown
   rotate: false
-  xy: 1029, 369
+  xy: 517, 1
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-backArrow
-  rotate: false
-  xy: 1287, 551
-  size: 102, 460
-  orig: 102, 460
-  offset: 0, 0
-  index: -1
 rateBtnUp
   rotate: false
-  xy: 1391, 755
+  xy: 803, 209
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shopBtnDown
   rotate: false
-  xy: 1649, 755
+  xy: 1287, 465
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shopBtnUp
   rotate: false
-  xy: 1391, 497
+  xy: 1545, 465
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
+backArrow
+  rotate: false
+  xy: 1803, 519
+  size: 102, 460
+  orig: 102, 460
+  offset: 0, 0
+  index: -1
 pauseOff
   rotate: false
-  xy: 1029, 317
+  xy: 1029, 543
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 pauseOn
   rotate: false
-  xy: 1907, 961
+  xy: 1803, 467
   size: 50, 50
   orig: 50, 50
   offset: 0, 0

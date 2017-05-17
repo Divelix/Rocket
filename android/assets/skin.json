@@ -3,5 +3,6 @@
     white:  { hex: ffffffff },
     black:  { hex: 000000ff },
     yellow: { hex: f0cf1aff },
+    sky:    { hex: 009cffff }
   }
 }

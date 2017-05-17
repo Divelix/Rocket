@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -60,8 +61,8 @@ public class Cloud extends Actor {
             changeSprite();
             Gdx.app.log("RocketLogs", "cloud has changed sprite");
         }
-        if(bounds.overlaps(PlayScreen.rocket.getBounds()))
-            PlayScreen.gameOver();
+        if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds));
+//            PlayScreen.gameOver();
         super.act(delta);
     }
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 
@@ -21,17 +22,20 @@ public class Resource {
             rocket, doubleGreenRocket, greenRocket, shuttleRocket, smallRocket, yellowRocket,
             cellBg,
             star,
-            playBtnUp, playBtnDown, rateBtnUp, rateBtnDown, leadBtnUp, leadBtnDown, adsBtnUp, adsBtnDown, shopBtnUp, shopBtnDown, pauseOnBtn, pauseOffBtn, backArrow,
+            playBtnUp, playBtnDown, rateBtnUp, rateBtnDown, leadBtnUp, leadBtnDown, adsBtnUp, adsBtnDown, shopBtnUp, shopBtnDown, pauseOnBtn, pauseOffBtn, backArrow, frontArrow,
             rocketLogo,
             cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9;
     public static BitmapFont font, robotoThinFont;
     public static Array<TextureRegion> rockets2 = new Array<TextureRegion>();
     public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
+    public static Skin skin;
 
     public static void load() {
         skinPack = new TextureAtlas("skin.atlas");
         rocketPack = new TextureAtlas("rocketPack.atlas");
         gamePack = new TextureAtlas("gamePack.atlas");
+
+        skin = new Skin(Gdx.files.internal("skin.json"));
 
         landscape = new TextureRegion(gamePack.findRegion("landscape"));
 
@@ -54,6 +58,8 @@ public class Resource {
         pauseOffBtn = new TextureRegion(skinPack.findRegion("pauseOff"));
 
         backArrow = new TextureRegion(skinPack.findRegion("backArrow"));
+        frontArrow = new TextureRegion(skinPack.findRegion("backArrow"));
+        frontArrow.flip(true, false);
 
         rocket = new TextureRegion(rocketPack.findRegion("rocket"));
         doubleGreenRocket = new TextureRegion(rocketPack.findRegion("doubleGreenRocket"));
@@ -70,7 +76,7 @@ public class Resource {
 
         cellBg = new TextureRegion(skinPack.findRegion("cellBg"));
 
-        rocketLogo = new TextureRegion(skinPack.findRegion("rocketSpaceLogo"));
+        rocketLogo = new TextureRegion(skinPack.findRegion("rocketLogo"));
 
         star = new TextureRegion(gamePack.findRegion("star"));
 
@@ -90,12 +96,13 @@ public class Resource {
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
         params.size = 24;
         font = generatorDef.generateFont(params);
-        params.size = 50;
+        params.size = 40;
         robotoThinFont = generatorRobotoThin.generateFont(params);
     }
     public static void dispose() {
         gamePack.dispose();
         rocketPack.dispose();
         skinPack.dispose();
+        skin.dispose();
     }
 }

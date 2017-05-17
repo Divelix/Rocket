@@ -36,6 +36,8 @@ import com.divelix.rocket.actors.Star;
 
 public class ShopScreen implements Screen {
 
+    public static final int STAR_SIZE = 75;
+
     public static Game game;
     private Viewport view;
     private Stage stage;
@@ -59,60 +61,56 @@ public class ShopScreen implements Screen {
             starsCount = 0;
             System.out.println("Stars: 0");
         }
-        //Back button
-//        final int BACK_ARROW_HEIGHT = 100;
-//        Image backArrowImg = new Image(Resource.backArrow);
-//        ImageButton backBtn = new ImageButton(backArrowImg.getDrawable(), backArrowImg.getDrawable());
-//        float aspectRatio = backArrowImg.getWidth()/backArrowImg.getHeight();
-//        backBtn.setSize(BACK_ARROW_HEIGHT*aspectRatio, BACK_ARROW_HEIGHT);
-//        backBtn.setPosition(50, Main.HEIGHT-BACK_ARROW_HEIGHT);
+        //Top nav elements
         BackButton backBtn = new BackButton();
-        backBtn.setPosition(0, Main.HEIGHT-70);
+        Label shopText = new Label("SHOP", new Label.LabelStyle(Resource.font, Color.WHITE));
+        PlayButton playBtn = new PlayButton();
         //Star image and count
         Image starImg = new Image(Resource.star);
-        starImg.setBounds(Main.WIDTH/2 - 50, 600, 50, 50);
-        Label starText = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.font, Color.YELLOW));
-        starText.setPosition(Main.WIDTH/2, 600);
+//        starImg.setBounds(Main.WIDTH/2 - 50, 600, 50, 50);
+        Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoThinFont, Color.YELLOW));
+//        starsCountLabel.setPosition(Main.WIDTH/2, 600);
         //Shop as a scrollable table
-        Table table = new Table();
-        table.setSize(Main.WIDTH - Main.WIDTH/10, Main.HEIGHT - 200);
-        table.setPosition(Main.WIDTH/20, 0);
+        Table rocketTable = new Table();
+//        rocketTable.setSize(Main.WIDTH - Main.WIDTH/10, Main.HEIGHT - 200);
+//        rocketTable.setPosition(Main.WIDTH/20, 0);
 
         for (int i = 1; i <= Resource.rockets.size; i++) {
-            table.add(new ShopCell(Resource.rockets.getKeyAt(i-1), Resource.rockets.getValueAt(i-1))).width(100).pad(15);
-            if(i % 3 == 0) table.row();
+            rocketTable.add(new ShopCell(Resource.rockets.getKeyAt(i-1), Resource.rockets.getValueAt(i-1))).width(100).pad(15);
+            if(i % 3 == 0) rocketTable.row();
         }
 
-//        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
-//        table.add(new ShopCell(Resource.doubleGreenRocket, 200)).width(100).pad(10);
-//        table.add(new ShopCell(Resource.greenRocket, 300)).width(100).pad(10);
-//        table.row();
-//        table.add(new ShopCell(Resource.shuttleRocket, 400)).width(100).pad(10);
-//        table.add(new ShopCell(Resource.smallRocket, 500)).width(100).pad(10);
-//        table.add(new ShopCell(Resource.yellowRocket, 600)).width(100).pad(10);
-//        table.row();
-//        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
-//        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
-//        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
-//        table.row();
-//        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
-//        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
-//        table.add(new ShopCell(Resource.rocket, 100)).width(100).pad(10);
+        ScrollPane scrollPane = new ScrollPane(rocketTable);
+//        scrollPane.debugAll();//TODO delete later
+//        scrollPane.setSize(rocketTable.getWidth(), rocketTable.getHeight());
+//        scrollPane.setPosition(rocketTable.getX(), rocketTable.getY());
 
-        ScrollPane scrollPane = new ScrollPane(table);
-        scrollPane.debugAll();//TODO delete later
-        scrollPane.setSize(table.getWidth(), table.getHeight());
-        scrollPane.setPosition(table.getX(), table.getY());
+        Table table = new Table();
+        table.setFillParent(true);
+        table.setSize(Main.WIDTH, Main.HEIGHT);
+//        table.setWidth(Main.WIDTH);
+//        table.align(Align.center|Align.top);
+//        table.setPosition(0, Main.HEIGHT);
+        table.top();
+        table.add(backBtn).height(50).left().expandX();
+        table.add(shopText).height(50).center().expandX();
+        table.add(playBtn).height(50).right().expandX();
+        table.row();
+        table.add(starImg).width(STAR_SIZE).height(STAR_SIZE).colspan(3).padTop(25);
+        table.row();
+        table.add(starsCountLabel).colspan(3);
+        table.row();
+        table.add(scrollPane).colspan(3).padTop(25);
 
-        stage.addActor(backBtn);
-        stage.addActor(starImg);
-        stage.addActor(starText);
-        stage.addActor(scrollPane);
+//        table.debugAll();
+        table.setDebug(true);
+
+        stage.addActor(table);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(130 / 255.0f, 200 / 255.0f, 225 / 255.0f, 1f);
+        Gdx.gl.glClearColor(0 / 255.0f, 156 / 255.0f, 225 / 255.0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
@@ -152,6 +150,7 @@ public class ShopScreen implements Screen {
             arrow.setSize(arrowHeight*aspectRatio, arrowHeight);
             Label text = new Label("BACK", new Label.LabelStyle(Resource.robotoThinFont, Color.WHITE));
             text.setX(arrow.getX() + arrow.getWidth());
+            setSize(text.getWidth()+arrow.getWidth(), arrowHeight);
             super.addActor(arrow);
             super.addActor(text);
             super.addListener(new ClickListener() {
@@ -161,6 +160,32 @@ public class ShopScreen implements Screen {
                         @Override
                         public void run() {
                             game.setScreen(new MenuScreen(game));
+                        }
+                    })));
+                }
+            });
+        }
+    }
+
+    public class PlayButton extends Group {
+        public PlayButton() {
+            Image arrow = new Image(Resource.frontArrow);
+            float aspectRatio = arrow.getWidth()/arrow.getHeight();
+            int arrowHeight = 50;
+            arrow.setSize(arrowHeight*aspectRatio, arrowHeight);
+            Label text = new Label("PLAY", new Label.LabelStyle(Resource.robotoThinFont, Color.WHITE));
+            text.setX(getX());
+            arrow.setX(getX() + text.getWidth());
+            setSize(text.getWidth()+arrow.getWidth(), arrowHeight);
+            super.addActor(text);
+            super.addActor(arrow);
+            super.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.setScreen(new PlayScreen(game));
                         }
                     })));
                 }

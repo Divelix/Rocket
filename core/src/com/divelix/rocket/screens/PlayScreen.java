@@ -3,6 +3,7 @@ package com.divelix.rocket.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -31,7 +32,7 @@ import com.divelix.rocket.actors.Star;
  * Created by Sergei Sergienko on 05.02.2017.
  */
 
-public class PlayScreen implements Screen, GestureDetector.GestureListener {
+public class PlayScreen implements Screen, InputProcessor {
 
     public static final int DISTANCE = 300;
     private static final int PAUSE_BTN_SIZE = 50;
@@ -61,8 +62,7 @@ public class PlayScreen implements Screen, GestureDetector.GestureListener {
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
         view = new FillViewport(Main.WIDTH, Main.HEIGHT, camera);
         stage = new Stage(view, batch);
-        GestureDetector gestureDetector = new GestureDetector(this);
-        Gdx.input.setInputProcessor(gestureDetector);
+        Gdx.input.setInputProcessor(this);
 
         Image landscape = new Image(new TextureRegion(Resource.landscape));
         scoreLabel = new Label("Score: " + score, new Label.LabelStyle(Resource.font, Color.RED));
@@ -178,59 +178,60 @@ public class PlayScreen implements Screen, GestureDetector.GestureListener {
         game.setScreen(new MenuScreen(game));
     }
 //-----------------------------------------GESTURES------------------------------------------
+
     @Override
-    public boolean touchDown(float x, float y, int pointer, int button) {
-        if(x > pauseBtn.getX() && y < pauseBtn.getHeight()) {
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(screenX > pauseBtn.getX() && screenY < pauseBtn.getHeight()) {
             if(pause) {
                 pause = false;
             } else {
                 pause = true;
             }
-        } else {
-            rocket.velocity.y = Rocket.JUMP_HEIGHT;
+        } else if(screenX < Main.WIDTH/2) {
+            rocket.velocity.x = -200;
+//            rocket.setRotation(30);
+            rocket.rotate(30);
+        } else if(screenX > Main.WIDTH/2) {
+            rocket.velocity.x = 200;
+//            rocket.setRotation(-30);
+            rocket.rotate(-30);
         }
         return true;
     }
 
     @Override
-    public boolean tap(float x, float y, int count, int button) {
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
     @Override
-    public boolean longPress(float x, float y) {
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+//        rocket.position.x = screenX;
         return false;
     }
 
     @Override
-    public boolean fling(float velocityX, float velocityY, int button) {
-        //срабатывает при отпускании
+    public boolean mouseMoved(int screenX, int screenY) {
         return false;
     }
 
     @Override
-    public boolean pan(float x, float y, float deltaX, float deltaY) {
-        rocket.velocity.y += deltaY*3;
-        return true;
-    }
-
-    @Override
-    public boolean panStop(float x, float y, int pointer, int button) {
+    public boolean scrolled(int amount) {
         return false;
-    }
-
-    @Override
-    public boolean zoom(float initialDistance, float distance) {
-        return false;
-    }
-
-    @Override
-    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-        return false;
-    }
-
-    @Override
-    public void pinchStop() {
-
     }
 }

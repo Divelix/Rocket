@@ -2,6 +2,7 @@ package com.divelix.rocket.actors;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -43,7 +44,7 @@ public class Star extends Actor {
         bounds.setPosition(getX(), getY());
         sprite.setPosition(getX(), getY());
         sprite.rotate(DEGREES);
-        if(bounds.overlaps(PlayScreen.rocket.getBounds())) {
+        if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds)) {
             position.y += PlayScreen.DISTANCE * 3;
             PlayScreen.score++;
         }

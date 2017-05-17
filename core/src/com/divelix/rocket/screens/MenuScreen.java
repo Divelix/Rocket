@@ -25,9 +25,11 @@ import com.divelix.rocket.Resource;
  */
 
 public class MenuScreen implements Screen {
-    private static final int LOGO_WIDTH = 480;
-    private static final int PLAY_BTN_SIZE = 200;
+    private static final int LOGO_WIDTH = 400;
+    private static final int PLAY_BTN_SIZE = 240;
     private static final int MENU_BTN_SIZE = 100;
+    private static final int STAR_SIZE = 75;
+    private static final int STAR_Y = 150;
     public static int bestScore;
     public static int starsCount;
     private Game game;
@@ -60,18 +62,20 @@ public class MenuScreen implements Screen {
     public void show() {
         System.out.println("Show method!");
 
-        Label bestScoreLabel = new Label("Best Score: " + bestScore, new Label.LabelStyle(Resource.font, Color.RED));
+        view = new ExtendViewport(Main.WIDTH, Main.HEIGHT);
+
+        Label bestScoreLabel = new Label("Best Score: " + bestScore, new Label.LabelStyle(Resource.robotoThinFont, Color.RED));
 
         Image logo = new Image(Resource.rocketLogo);
-        float aspectRatio = logo.getHeight()/logo.getWidth();
-        logo.setBounds(Main.WIDTH/2 - LOGO_WIDTH /2, Main.HEIGHT - LOGO_WIDTH *aspectRatio*2, LOGO_WIDTH, LOGO_WIDTH *aspectRatio);
+        float aspectRatio = logo.getHeight() / logo.getWidth();
+//        logo.setSize(LOGO_WIDTH, LOGO_WIDTH * aspectRatio);
+
         Image playBtnUpImg = new Image(Resource.playBtnUp);
         Image playBtnDownImg = new Image(Resource.playBtnDown);
         Image shopBtnUpImg = new Image(Resource.shopBtnUp);
         Image shopBtnDownImg = new Image(Resource.shopBtnDown);
-
         ImageButton playBtn = new ImageButton(playBtnUpImg.getDrawable(), playBtnDownImg.getDrawable());
-        playBtn.setBounds(Main.WIDTH / 2 - PLAY_BTN_SIZE / 2, Main.HEIGHT / 2.5f - PLAY_BTN_SIZE / 2, PLAY_BTN_SIZE, PLAY_BTN_SIZE);
+        playBtn.setSize(PLAY_BTN_SIZE, PLAY_BTN_SIZE);
         playBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -80,12 +84,11 @@ public class MenuScreen implements Screen {
         });
 
         Image star = new Image(Resource.star);
-        star.setBounds(200, 150, 50, 50);
-        Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.font, Color.YELLOW));
-        starsCountLabel.setPosition(250, 155);
+        star.setBounds(Main.WIDTH/2-STAR_SIZE/2, STAR_Y, STAR_SIZE, STAR_SIZE);
+        Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoThinFont, Color.YELLOW));
+        starsCountLabel.setPosition(Main.WIDTH/2-starsCountLabel.getWidth()/2, star.getY()-starsCountLabel.getHeight());
 
         ImageButton shopBtn = new ImageButton(shopBtnUpImg.getDrawable(), shopBtnDownImg.getDrawable());
-        shopBtn.setBounds(50, 50, MENU_BTN_SIZE, MENU_BTN_SIZE);
         shopBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -94,18 +97,23 @@ public class MenuScreen implements Screen {
         });
 
         Table table = new Table();
-        table.top();
         table.setFillParent(true);
-        table.add(bestScoreLabel).expandX().padTop(300);
+        table.top();
+        table.add(logo).width(LOGO_WIDTH).height(LOGO_WIDTH*aspectRatio).padTop(50);
+        table.row();
+        table.add(bestScoreLabel).padTop(40);
+        table.row();
+        table.add(playBtn).width(PLAY_BTN_SIZE).height(PLAY_BTN_SIZE).padTop(40);
+        table.row();
+        table.add(star).width(STAR_SIZE).height(STAR_SIZE).padTop(25);
+        table.row();
+        table.add(starsCountLabel);
+        table.row();
+        table.add(shopBtn).height(MENU_BTN_SIZE).padTop(20);
 
-        view = new ExtendViewport(Main.WIDTH, Main.HEIGHT);
         stage = new Stage(view);
-        stage.addActor(logo);
         stage.addActor(table);
-        stage.addActor(playBtn);
-        stage.addActor(star);
-        stage.addActor(starsCountLabel);
-        stage.addActor(shopBtn);
+        stage.setDebugAll(true);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -130,7 +138,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(130 / 255.0f, 200 / 255.0f, 225 / 255.0f, 1f);
+        Gdx.gl.glClearColor(0 / 255.0f, 156 / 255.0f, 225 / 255.0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
