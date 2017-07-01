@@ -2,6 +2,7 @@ package com.divelix.rocket.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -9,9 +10,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -19,6 +22,8 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.Main;
 import com.divelix.rocket.Resource;
+
+import static com.divelix.rocket.Resource.skin;
 
 /**
  * Created by Sergei Sergienko on 05.02.2017.
@@ -35,9 +40,11 @@ public class MenuScreen implements Screen {
     private Game game;
     private Viewport view;
     private Stage stage;
+    private Dialog dialog;
 
     public MenuScreen(Game game) {
         this.game = game;
+        Gdx.input.setCatchBackKey(true);
         Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
         try {
             bestScore = pref.getInteger("bestScore");
@@ -60,9 +67,9 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        System.out.println("Show method!");
+        Gdx.app.log("RocketLogs", "MenuScreen - show");
 
-        view = new ExtendViewport(Main.WIDTH, Main.HEIGHT);
+        view = new FillViewport(Main.WIDTH, Main.HEIGHT);
 
         Label bestScoreLabel = new Label("Best Score: " + bestScore, new Label.LabelStyle(Resource.robotoThinFont, Color.RED));
 
@@ -70,12 +77,7 @@ public class MenuScreen implements Screen {
         float aspectRatio = logo.getHeight() / logo.getWidth();
 //        logo.setSize(LOGO_WIDTH, LOGO_WIDTH * aspectRatio);
 
-        Image playBtnUpImg = new Image(Resource.playBtnUp);
-        Image playBtnDownImg = new Image(Resource.playBtnDown);
-        Image shopBtnUpImg = new Image(Resource.shopBtnUp);
-        Image shopBtnDownImg = new Image(Resource.shopBtnDown);
-        ImageButton playBtn = new ImageButton(playBtnUpImg.getDrawable(), playBtnDownImg.getDrawable());
-        playBtn.setSize(PLAY_BTN_SIZE, PLAY_BTN_SIZE);
+        ImageButton playBtn = new ImageButton(skin, "playBtn");
         playBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -88,7 +90,7 @@ public class MenuScreen implements Screen {
         Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoThinFont, Color.YELLOW));
         starsCountLabel.setPosition(Main.WIDTH/2-starsCountLabel.getWidth()/2, star.getY()-starsCountLabel.getHeight());
 
-        ImageButton shopBtn = new ImageButton(shopBtnUpImg.getDrawable(), shopBtnDownImg.getDrawable());
+        ImageButton shopBtn = new ImageButton(skin, "shopBtn");
         shopBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -109,11 +111,32 @@ public class MenuScreen implements Screen {
         table.row();
         table.add(starsCountLabel);
         table.row();
-        table.add(shopBtn).height(MENU_BTN_SIZE).padTop(20);
+        table.add(shopBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).padTop(20);
+
+        dialog = new Dialog("", skin){
+            @Override
+            protected void result(Object object) {
+                if(object.equals(true)) Gdx.app.exit();
+            }
+        };
+        dialog.text("Exit?");
+        dialog.button("Yes", true);
+        dialog.button("No", false);
+//        dialog.key(Input.Keys.ENTER, true);
+//        dialog.key(Input.Keys.ESCAPE, false);
+
+        dialog.pad(20, 20, 20, 20);
+        dialog.getButtonTable().padTop(30);
+        dialog.getButtonTable().defaults().height(150);
+        dialog.getButtonTable().defaults().width(150);
+        dialog.setModal(true);
+        dialog.setMovable(false);
+        dialog.setResizable(true);
+        dialog.setVisible(true);
 
         stage = new Stage(view);
         stage.addActor(table);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -142,6 +165,11 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            stage.addActor(dialog);
+            dialog.show(stage);
+//            Gdx.app.exit();
+        }
     }
 
     @Override

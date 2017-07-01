@@ -1,5 +1,6 @@
 package com.divelix.rocket.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
@@ -17,7 +18,9 @@ public class Rocket extends Actor {
 
     private static final int GRAVITY = -15;
     private static final int START_HEIGHT = 100;
-    public static final int JUMP_HEIGHT = 450;
+    private static final int VELOCITY = 250;
+    private static final int MAX_ANGLE = 30;
+//    public static final int JUMP_HEIGHT = 450;
     private static final int ROCKET_WIDTH = 50;
     private static float maxHeight = 0;
     public Vector2 position;
@@ -30,6 +33,7 @@ public class Rocket extends Actor {
         position = new Vector2(0, 0);
         velocity = new Vector2(0, 0);
         sprite = new Sprite(Resource.rocket);
+//        sprite.setColor(Color.BLACK);
         float aspectRatio = sprite.getHeight()/sprite.getWidth();
         setBounds(position.x, position.y, ROCKET_WIDTH, ROCKET_WIDTH * aspectRatio);
         sprite.setBounds(getX(), getY(), getWidth(), getHeight());
@@ -46,6 +50,21 @@ public class Rocket extends Actor {
     public Vector2 getPosition() { return position; }
 
     public Circle getBounds() { return bounds; }
+
+//    public void moveLeft() {
+//        velocity.x = -VELOCITY;
+////        sprite.setRotation(MAX_ANGLE);
+//    }
+//
+//    public void moveRight() {
+//        velocity.x = VELOCITY;
+////        sprite.setRotation(-MAX_ANGLE);
+//    }
+//
+//    public void resetMove() {
+//        velocity.x = 0;
+//        sprite.setRotation(0);
+//    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

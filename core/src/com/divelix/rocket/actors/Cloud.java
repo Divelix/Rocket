@@ -19,11 +19,11 @@ import com.divelix.rocket.screens.PlayScreen;
 // аналог Enemy в старой версии
 public class Cloud extends Actor {
 
-    public static final int cloudWidth = 150;
-    public int speed;
-    public Vector2 position;
-    public Sprite sprite;
-    public float aspectRatio;
+    private static final int cloudWidth = 150;
+    private int speed;
+    private Vector2 position;
+    private  Sprite sprite;
+    private float aspectRatio;
     private Rectangle bounds;
     private boolean moveRight;
 
@@ -34,7 +34,7 @@ public class Cloud extends Actor {
         position = new Vector2(MathUtils.random(0, Main.WIDTH/2), height);
         bounds = new Rectangle(position.x+2, position.y, cloudWidth-4, cloudWidth*aspectRatio*0.7f);
         moveRight = true;
-        speed = MathUtils.random(55, 80);
+        speed = MathUtils.random(10, 15);
     }
 
     @Override
@@ -61,7 +61,8 @@ public class Cloud extends Actor {
             changeSprite();
             Gdx.app.log("RocketLogs", "cloud has changed sprite");
         }
-        if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds));
+        if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds))
+            Gdx.input.vibrate(100);
 //            PlayScreen.gameOver();
         super.act(delta);
     }
@@ -84,7 +85,7 @@ public class Cloud extends Actor {
         return textureRegion;
     }
 
-    public void changeSprite() {
+    private void changeSprite() {
         sprite = new Sprite(pickSprite(MathUtils.random(9)));
         aspectRatio = sprite.getHeight()/sprite.getWidth();
         sprite.setSize(cloudWidth, cloudWidth * aspectRatio);

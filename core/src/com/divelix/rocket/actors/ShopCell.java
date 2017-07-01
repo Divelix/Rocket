@@ -1,6 +1,7 @@
 package com.divelix.rocket.actors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,41 +17,37 @@ import com.divelix.rocket.screens.ShopScreen;
  */
 
 public class ShopCell extends Group {
+    private final float WIDTH = 100;
+    private final float HEIGHT = 150;
+    private Label label;
 
-    public ShopCell(TextureRegion rocketImg, int price) {
-        final float WIDTH = 100;
-        final float HEIGHT = 150;
-        super.setSize(WIDTH, HEIGHT);
-        final Image cellBg = new Image(Resource.cellBg);
+    public ShopCell(TextureRegion rocketTxt, int price) {
+        this.setSize(WIDTH, HEIGHT);
+        Image cellBg = new Image(Resource.cellBg);
         cellBg.setSize(WIDTH, HEIGHT);
-        Image rocket = new Image(rocketImg);
+//        Sprite sprite = new Sprite(rocketTxt);
+//        sprite.setColor(Color.BLACK);
+        Image rocket = new Image(rocketTxt);
         float aspectRatio = rocket.getWidth()/rocket.getHeight();
         rocket.setBounds(cellBg.getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), cellBg.getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
-        final Label label = new Label(String.valueOf(price), new Label.LabelStyle(Resource.font, Color.YELLOW));
+        label = new Label(String.valueOf(price), new Label.LabelStyle(Resource.font, Color.YELLOW));
         label.setPosition(cellBg.getX() + WIDTH/2 - label.getWidth()/2, cellBg.getY() + HEIGHT/15);
-        super.addActor(cellBg);
-        super.addActor(rocket);
-        super.addActor(label);
+        this.addActor(cellBg);
+        this.addActor(rocket);
+        this.addActor(label);
 //        float aspectRatio = rocket.getWidth()/rocket.getHeight();
 //        rocket.setBounds(getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
 //        label.setPosition(getX() + WIDTH/7, getY() + HEIGHT/15);
-        super.addListener(new ClickListener() {
+        this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-//                label.setText("sold");
-//                label.setStyle(new Label.LabelStyle(Resource.font, Color.GREEN));
-                ShopCell.super.removeActor(label);
-                Label newLabel = new Label("sold", new Label.LabelStyle(Resource.font, Color.GREEN));
-                newLabel.setPosition(cellBg.getX() + WIDTH/2 - newLabel.getWidth()/2, cellBg.getY() + HEIGHT/15);
-                addActor(newLabel);
+                label.setText("sold");
+                label.setStyle(new Label.LabelStyle(Resource.font, Color.GREEN));
             }
         });
     }
 
-//    @Override
-//    public void draw(Batch batch, float parentAlpha) {
-//        cellBg.draw(batch, parentAlpha);
-//        rocket.draw(batch, parentAlpha);
-//        label.draw(batch, parentAlpha);
-//    }
+    public void openRocket() {
+
+    }
 }

@@ -1,6 +1,7 @@
 package com.divelix.rocket;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -21,6 +22,7 @@ public class Resource {
     public static TextureRegion landscape,
             rocket, doubleGreenRocket, greenRocket, shuttleRocket, smallRocket, yellowRocket,
             cellBg,
+            whitePixel,
             star,
             playBtnUp, playBtnDown, rateBtnUp, rateBtnDown, leadBtnUp, leadBtnDown, adsBtnUp, adsBtnDown, shopBtnUp, shopBtnDown, pauseOnBtn, pauseOffBtn, backArrow, frontArrow,
             rocketLogo,
@@ -35,27 +37,27 @@ public class Resource {
         rocketPack = new TextureAtlas("rocketPack.atlas");
         gamePack = new TextureAtlas("gamePack.atlas");
 
-        skin = new Skin(Gdx.files.internal("skin.json"));
+//        skin = new Skin(Gdx.files.internal("skin.json"));
 
         landscape = new TextureRegion(gamePack.findRegion("landscape"));
 
-        playBtnUp = new TextureRegion(skinPack.findRegion("btnUp"));
-        playBtnDown = new TextureRegion(skinPack.findRegion("btnDown"));
+//        playBtnUp = new TextureRegion(skinPack.findRegion("playBtnUp"));
+//        playBtnDown = new TextureRegion(skinPack.findRegion("playBtnDown"));
+//
+//        adsBtnUp = new TextureRegion(skinPack.findRegion("adsBtnUp"));
+//        adsBtnDown = new TextureRegion(skinPack.findRegion("adsBtnDown"));
+//
+//        shopBtnUp = new TextureRegion(skinPack.findRegion("shopBtnUp"));
+//        shopBtnDown = new TextureRegion(skinPack.findRegion("shopBtnDown"));
+//
+//        leadBtnUp = new TextureRegion(skinPack.findRegion("leadBtnUp"));
+//        leadBtnDown = new TextureRegion(skinPack.findRegion("leadBtnDown"));
+//
+//        rateBtnUp = new TextureRegion(skinPack.findRegion("rateBtnUp"));
+//        rateBtnDown = new TextureRegion(skinPack.findRegion("rateBtnDown"));
 
-        adsBtnUp = new TextureRegion(skinPack.findRegion("adsBtnUp"));
-        adsBtnDown = new TextureRegion(skinPack.findRegion("adsBtnDown"));
-
-        shopBtnUp = new TextureRegion(skinPack.findRegion("shopBtnUp"));
-        shopBtnDown = new TextureRegion(skinPack.findRegion("shopBtnDown"));
-
-        leadBtnUp = new TextureRegion(skinPack.findRegion("leadBtnUp"));
-        leadBtnDown = new TextureRegion(skinPack.findRegion("leadBtnDown"));
-
-        rateBtnUp = new TextureRegion(skinPack.findRegion("rateBtnUp"));
-        rateBtnDown = new TextureRegion(skinPack.findRegion("rateBtnDown"));
-
-        pauseOnBtn = new TextureRegion(skinPack.findRegion("pauseOn"));
-        pauseOffBtn = new TextureRegion(skinPack.findRegion("pauseOff"));
+//        pauseOnBtn = new TextureRegion(skinPack.findRegion("pauseOn"));
+//        pauseOffBtn = new TextureRegion(skinPack.findRegion("pauseOff"));
 
         backArrow = new TextureRegion(skinPack.findRegion("backArrow"));
         frontArrow = new TextureRegion(skinPack.findRegion("backArrow"));
@@ -75,6 +77,8 @@ public class Resource {
         rockets.put(yellowRocket, 600);
 
         cellBg = new TextureRegion(skinPack.findRegion("cellBg"));
+
+        whitePixel = new TextureRegion(skinPack.findRegion("whitePixel"));
 
         rocketLogo = new TextureRegion(skinPack.findRegion("rocketLogo"));
 
@@ -98,6 +102,16 @@ public class Resource {
         font = generatorDef.generateFont(params);
         params.size = 40;
         robotoThinFont = generatorRobotoThin.generateFont(params);
+
+        skin = new Skin();
+        skin.add("default-font", font, BitmapFont.class);
+        skin.add("roboto-thin-font", robotoThinFont, BitmapFont.class);
+        FileHandle fileHandle = Gdx.files.internal("skin.json");
+        FileHandle atlasFile = fileHandle.sibling("skin.atlas");
+        if (atlasFile.exists()) {
+            skin.addRegions(new TextureAtlas(atlasFile));
+        }
+        skin.load(fileHandle);
     }
     public static void dispose() {
         gamePack.dispose();

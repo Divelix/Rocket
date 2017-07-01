@@ -2,6 +2,7 @@ package com.divelix.rocket.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -36,14 +37,15 @@ import com.divelix.rocket.actors.Star;
 
 public class ShopScreen implements Screen {
 
-    public static final int STAR_SIZE = 75;
+    private static final int STAR_SIZE = 75;
 
-    public static Game game;
+    private static Game game;
     private Viewport view;
     private Stage stage;
 
     public ShopScreen(Game game) {
         this.game = game;
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
@@ -63,28 +65,23 @@ public class ShopScreen implements Screen {
         }
         //Top nav elements
         BackButton backBtn = new BackButton();
-        Label shopText = new Label("SHOP", new Label.LabelStyle(Resource.font, Color.WHITE));
+        Label shopText = new Label("SHOP", new Label.LabelStyle(Resource.robotoThinFont, Color.WHITE));
         PlayButton playBtn = new PlayButton();
         //Star image and count
         Image starImg = new Image(Resource.star);
-//        starImg.setBounds(Main.WIDTH/2 - 50, 600, 50, 50);
         Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoThinFont, Color.YELLOW));
-//        starsCountLabel.setPosition(Main.WIDTH/2, 600);
         //Shop as a scrollable table
         Table rocketTable = new Table();
-//        rocketTable.setSize(Main.WIDTH - Main.WIDTH/10, Main.HEIGHT - 200);
-//        rocketTable.setPosition(Main.WIDTH/20, 0);
 
+        //SHOP TABLE
         for (int i = 1; i <= Resource.rockets.size; i++) {
             rocketTable.add(new ShopCell(Resource.rockets.getKeyAt(i-1), Resource.rockets.getValueAt(i-1))).width(100).pad(15);
             if(i % 3 == 0) rocketTable.row();
         }
 
         ScrollPane scrollPane = new ScrollPane(rocketTable);
-//        scrollPane.debugAll();//TODO delete later
-//        scrollPane.setSize(rocketTable.getWidth(), rocketTable.getHeight());
-//        scrollPane.setPosition(rocketTable.getX(), rocketTable.getY());
 
+        //WHOLE SCREEN TABLE
         Table table = new Table();
         table.setFillParent(true);
         table.setSize(Main.WIDTH, Main.HEIGHT);
@@ -100,7 +97,7 @@ public class ShopScreen implements Screen {
         table.row();
         table.add(starsCountLabel).colspan(3);
         table.row();
-        table.add(scrollPane).colspan(3).padTop(25);
+        table.add(scrollPane).colspan(3).padTop(25);//(scrollable) table with rockets
 
 //        table.debugAll();
         table.setDebug(true);
@@ -114,6 +111,14 @@ public class ShopScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new MenuScreen(game));
+                }
+            })));
+        }
     }
 
     @Override
@@ -142,8 +147,8 @@ public class ShopScreen implements Screen {
         stage.dispose();
     }
 
-    public class BackButton extends Group {
-        public BackButton() {
+    private class BackButton extends Group {
+        private BackButton() {
             Image arrow = new Image(Resource.backArrow);
             float aspectRatio = arrow.getWidth()/arrow.getHeight();
             int arrowHeight = 50;
@@ -167,8 +172,8 @@ public class ShopScreen implements Screen {
         }
     }
 
-    public class PlayButton extends Group {
-        public PlayButton() {
+    private class PlayButton extends Group {
+        private PlayButton() {
             Image arrow = new Image(Resource.frontArrow);
             float aspectRatio = arrow.getWidth()/arrow.getHeight();
             int arrowHeight = 50;

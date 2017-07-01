@@ -1,8 +1,33 @@
 {
-  com.badlogic.gdx.graphics.Color: {
-    white:  { hex: ffffffff },
-    black:  { hex: 000000ff },
-    yellow: { hex: f0cf1aff },
-    sky:    { hex: 009cffff }
+  "com.badlogic.gdx.graphics.Color": {
+    "white":  { "hex": "ffffffff" },
+    "white2": { "hex": "ffffffaa" },
+    "red":    { "hex": "ff0000ff" },
+    "black":  { "hex": "000000ff" },
+    "yellow": { "hex": "f0cf1aff" },
+    "sky":    { "hex": "009cffff" }
+  },
+
+  "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+    "dialogDim": { "name": "whitePixel", "color": "white2" },
+    "dialogBtnBgDown": { "name": "dialogBtnBg", "color": "white2" }
+  },
+
+  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "default": { "font": "roboto-thin-font", "fontColor": "red" }
+  },
+
+  "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+    "default": { "down": "dialogBtnBgDown", "up": "dialogBtnBg", "font": "roboto-thin-font", "fontColor": "red" }
+  },
+
+  "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
+    "playBtn": { "up": "playBtnUp", "down": "playBtnDown" },
+    "shopBtn": { "up": "shopBtnUp", "down": "shopBtnDown" },
+    "pause":   { "up": "pause", "down": "pause" }
+  },
+
+  "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+    "default": { "titleFont": "default-font", "background": "dialogDim", "titleFontColor": "black" }
   }
 }
