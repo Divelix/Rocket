@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
@@ -26,7 +25,8 @@ public class Resource {
             star,
             playBtnUp, playBtnDown, rateBtnUp, rateBtnDown, leadBtnUp, leadBtnDown, adsBtnUp, adsBtnDown, shopBtnUp, shopBtnDown, pauseOnBtn, pauseOffBtn, backArrow, frontArrow,
             rocketLogo,
-            cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9;
+            cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9,
+            missile;
     public static BitmapFont font, robotoThinFont;
     public static Array<TextureRegion> rockets2 = new Array<TextureRegion>();
     public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
@@ -94,6 +94,8 @@ public class Resource {
         cloud7 = new TextureRegion(gamePack.findRegion("cloud7"));
         cloud8 = new TextureRegion(gamePack.findRegion("cloud8"));
         cloud9 = new TextureRegion(gamePack.findRegion("cloud9"));
+
+        missile = new TextureRegion(gamePack.findRegion("missile"));
 
         FreeTypeFontGenerator generatorDef = new FreeTypeFontGenerator(Gdx.files.internal("fonts/AGRevueCyrRoman.ttf"));
         FreeTypeFontGenerator generatorRobotoThin = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Thin.ttf"));

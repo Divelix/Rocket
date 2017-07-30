@@ -1,16 +1,18 @@
 {
   "com.badlogic.gdx.graphics.Color": {
-    "white":  { "hex": "ffffffff" },
-    "white2": { "hex": "ffffffaa" },
-    "red":    { "hex": "ff0000ff" },
-    "black":  { "hex": "000000ff" },
-    "yellow": { "hex": "f0cf1aff" },
-    "sky":    { "hex": "009cffff" }
+    "white":       { "hex": "ffffffff" },
+    "whiteT":      { "hex": "ffffffcc" },
+    "transparent": { "hex": "ffffff00" },
+    "red":         { "hex": "ff0000ff" },
+    "black":       { "hex": "000000ff" },
+    "yellow":      { "hex": "f0cf1aff" },
+    "sky":         { "hex": "009cffff" }
   },
 
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
-    "dialogDim": { "name": "whitePixel", "color": "white2" },
-    "dialogBtnBgDown": { "name": "dialogBtnBg", "color": "white2" }
+    "dialogDim": { "name": "whitePixel", "color": "whiteT" },
+    "dialogBtnBgDown": { "name": "dialogBtnBg", "color": "whiteT" },
+    "transparent": { "name": "dialogBtnBg", "color": "transparent" }
   },
 
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
@@ -18,7 +20,7 @@
   },
 
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
-    "default": { "down": "dialogBtnBgDown", "up": "dialogBtnBg", "font": "roboto-thin-font", "fontColor": "red" }
+    "default": { "down": "transparent", "up": "transparent", "font": "roboto-thin-font", "fontColor": "red" }
   },
 
   "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {

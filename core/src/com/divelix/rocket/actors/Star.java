@@ -47,6 +47,10 @@ public class Star extends Actor {
         if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds)) {
             position.y += PlayScreen.DISTANCE * 3;
             PlayScreen.score++;
+            PlayScreen.rocket.increaseSpeedLimit();
+        }
+        if(position.y < PlayScreen.camera.position.y - PlayScreen.camera.viewportHeight/2) {
+            position.y += PlayScreen.DISTANCE * 3;
         }
         super.act(delta);
     }

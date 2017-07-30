@@ -1,10 +1,8 @@
 package com.divelix.rocket.actors;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.divelix.rocket.Main;
@@ -17,14 +15,15 @@ import com.divelix.rocket.Resource;
 public class Rocket extends Actor {
 
     private static final int GRAVITY = -15;
-    private static final int START_HEIGHT = 100;
-    private static final int VELOCITY = 250;
-    private static final int MAX_ANGLE = 30;
-//    public static final int JUMP_HEIGHT = 450;
+    private static final int START_HEIGHT = 110;
     private static final int ROCKET_WIDTH = 50;
+//    private static final int VELOCITY = 250;
+//    private static final int MAX_ANGLE = 30;
+//    public static final int JUMP_HEIGHT = 450;
     private static float maxHeight = 0;
-    public Vector2 position;
-    public Vector2 velocity;
+    private static int speedLimit = 300;
+    private Vector2 position;
+    private Vector2 velocity;
 //    private Rectangle bounds;
     private Circle bounds;
     private Sprite sprite;
@@ -47,7 +46,17 @@ public class Rocket extends Actor {
         sprite.setRotation(deg);
     }
 
-    public Vector2 getPosition() { return position; }
+    public float getX() { return position.x; }
+    public void setX(float x) { position.x = x; }
+
+    public float getY() { return position.y; }
+    public void setY(float y) { position.y = y; }
+
+    public int getSpeedLimit() { return speedLimit; }
+    public void setSpeedLimit(int speed) { speedLimit = speed; }
+
+    public void increaseSpeedLimit() { speedLimit += 10; }
+    public void decreaseSpeedLimit() { speedLimit -= 10; }
 
     public Circle getBounds() { return bounds; }
 
@@ -85,10 +94,10 @@ public class Rocket extends Actor {
         if(position.y > maxHeight)
             maxHeight = position.y;
 
-        if(position.x > Main.WIDTH)
-            position.x = Main.WIDTH;
-        if(position.x < 0 - this.getWidth())
-            position.x = 0 - this.getWidth();
+//        if(position.x > Main.WIDTH)
+//            position.x = Main.WIDTH;
+//        if(position.x < 0 - this.getWidth())
+//            position.x = 0 - this.getWidth();
 
 //        if(Gdx.input.isTouched()) {
 //            velocity.y += 15;
@@ -99,8 +108,8 @@ public class Rocket extends Actor {
         if(velocity.y <= -1000)
             velocity.y = -1000;
         //Speed limit up
-        if(velocity.y > 300)
-            velocity.y = 300;
+        if(velocity.y > speedLimit)
+            velocity.y = speedLimit;
 
         this.setPosition(position.x, position.y);
         sprite.setPosition(position.x, position.y);

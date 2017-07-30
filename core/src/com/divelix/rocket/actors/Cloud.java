@@ -22,7 +22,7 @@ public class Cloud extends Actor {
     private static final int cloudWidth = 150;
     private int speed;
     private Vector2 position;
-    private  Sprite sprite;
+    private Sprite sprite;
     private float aspectRatio;
     private Rectangle bounds;
     private boolean moveRight;
@@ -34,7 +34,7 @@ public class Cloud extends Actor {
         position = new Vector2(MathUtils.random(0, Main.WIDTH/2), height);
         bounds = new Rectangle(position.x+2, position.y, cloudWidth-4, cloudWidth*aspectRatio*0.7f);
         moveRight = true;
-        speed = MathUtils.random(10, 15);
+        speed = MathUtils.random(20, 25);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Cloud extends Actor {
             position.add(2 * speed * delta, 0);
             if(position.x >= 480-getWidth()) moveRight = false;
         } else {
-            position.add(2 * -speed * delta, 0);
+            position.add(2 * - speed * delta, 0);
             if(position.x <= 0) moveRight = true;
         }
         setBounds(position.x, position.y, sprite.getWidth(), sprite.getHeight());
@@ -61,8 +61,10 @@ public class Cloud extends Actor {
             changeSprite();
             Gdx.app.log("RocketLogs", "cloud has changed sprite");
         }
-        if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds))
+        if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds)) {
+            PlayScreen.rocket.decreaseSpeedLimit();
             Gdx.input.vibrate(100);
+        }
 //            PlayScreen.gameOver();
         super.act(delta);
     }

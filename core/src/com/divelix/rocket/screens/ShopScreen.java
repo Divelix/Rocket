@@ -7,29 +7,23 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.Main;
 import com.divelix.rocket.Resource;
-import com.divelix.rocket.actors.ShopCell;
-import com.divelix.rocket.actors.Star;
+
+import static com.divelix.rocket.Resource.skin;
 
 /**
  * Created by Sergei Sergienko on 14.02.2017.
@@ -39,22 +33,26 @@ public class ShopScreen implements Screen {
 
     private static final int STAR_SIZE = 75;
 
-    private static Game game;
+    private Game game;
     private Viewport view;
     private Stage stage;
+    private Dialog dialog;
+    private int starsCount;
+    private static Label starsCountLabel;
+    private Preferences pref;
 
-    public ShopScreen(Game game) {
+    public ShopScreen(final Game game) {
         this.game = game;
         Gdx.input.setCatchBackKey(true);
+        pref = Gdx.app.getPreferences("com.divelix.rocket");
     }
 
     @Override
     public void show() {
+        Gdx.app.log("RocketLogs", "ShopScreen - show");
         view = new ExtendViewport(Main.WIDTH, Main.HEIGHT);
         stage = new Stage(view);
         Gdx.input.setInputProcessor(stage);
-        Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
-        int starsCount;
         try {
             starsCount = pref.getInteger("stars");
             System.out.println("Stars: " + starsCount);
@@ -69,7 +67,7 @@ public class ShopScreen implements Screen {
         PlayButton playBtn = new PlayButton();
         //Star image and count
         Image starImg = new Image(Resource.star);
-        Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoThinFont, Color.YELLOW));
+        starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoThinFont, Color.YELLOW));
         //Shop as a scrollable table
         Table rocketTable = new Table();
 
@@ -82,27 +80,49 @@ public class ShopScreen implements Screen {
         ScrollPane scrollPane = new ScrollPane(rocketTable);
 
         //WHOLE SCREEN TABLE
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setSize(Main.WIDTH, Main.HEIGHT);
+        Table screenTable = new Table();
+        screenTable.setFillParent(true);
+        screenTable.setSize(Main.WIDTH, Main.HEIGHT);
 //        table.setWidth(Main.WIDTH);
 //        table.align(Align.center|Align.top);
 //        table.setPosition(0, Main.HEIGHT);
-        table.top();
-        table.add(backBtn).height(50).left().expandX();
-        table.add(shopText).height(50).center().expandX();
-        table.add(playBtn).height(50).right().expandX();
-        table.row();
-        table.add(starImg).width(STAR_SIZE).height(STAR_SIZE).colspan(3).padTop(25);
-        table.row();
-        table.add(starsCountLabel).colspan(3);
-        table.row();
-        table.add(scrollPane).colspan(3).padTop(25);//(scrollable) table with rockets
+        screenTable.top();
+        screenTable.add(backBtn).height(50).left().expandX();
+        screenTable.add(shopText).height(50).center().expandX();
+        screenTable.add(playBtn).height(50).right().expandX();
+        screenTable.row();
+        screenTable.add(starImg).width(STAR_SIZE).height(STAR_SIZE).colspan(3).padTop(25);
+        screenTable.row();
+        screenTable.add(starsCountLabel).colspan(3);
+        screenTable.row();
+        screenTable.add(scrollPane).colspan(3).padTop(25);//(scrollable) table with rockets
 
 //        table.debugAll();
-        table.setDebug(true);
+        screenTable.setDebug(true);//TODO delete
 
-        stage.addActor(table);
+        dialog = new Dialog("", skin) {
+            @Override
+            protected void result(Object object) {
+                if(object.equals(true)) {
+                    hide(null);
+                }
+            }
+        };
+        dialog.text("Not enough stars");
+        dialog.button("Ok", true);
+        dialog.key(Input.Keys.ENTER, true);
+        dialog.key(Input.Keys.ESCAPE, false);
+
+        dialog.pad(20, 20, 20, 20);
+        dialog.getButtonTable().padTop(30);
+//        dialog.getButtonTable().defaults().height(150);
+//        dialog.getButtonTable().defaults().width(150);
+        dialog.setModal(true);
+        dialog.setMovable(false);
+        dialog.setResizable(true);
+        dialog.setVisible(true);
+
+        stage.addActor(screenTable);
     }
 
     @Override
@@ -129,21 +149,23 @@ public class ShopScreen implements Screen {
 
     @Override
     public void pause() {
-
+        Gdx.app.log("RocketLogs", "ShopScreen - pause");
     }
 
     @Override
     public void resume() {
-
+        Gdx.app.log("RocketLogs", "ShopScreen - resume");
     }
 
     @Override
     public void hide() {
-
+        Gdx.app.log("RocketLogs", "ShopScreen - hide");
+        dispose();
     }
 
     @Override
     public void dispose() {
+        Gdx.app.log("RocketLogs", "ShopScreen - dispose");
         stage.dispose();
     }
 
@@ -161,12 +183,7 @@ public class ShopScreen implements Screen {
             super.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            game.setScreen(new MenuScreen(game));
-                        }
-                    })));
+                    game.setScreen(new MenuScreen(game));
                 }
             });
         }
@@ -187,12 +204,51 @@ public class ShopScreen implements Screen {
             super.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            game.setScreen(new PlayScreen(game));
-                        }
-                    })));
+                    game.setScreen(new PlayScreen(game));
+                }
+            });
+        }
+    }
+
+    private class ShopCell extends Group {
+        private Label label;
+
+        private ShopCell(TextureRegion rocketTxt, final int price) {
+            final float WIDTH = 100;
+            final float HEIGHT = 150;
+            this.setSize(WIDTH, HEIGHT);
+            Image cellBg = new Image(Resource.cellBg);
+            cellBg.setSize(WIDTH, HEIGHT);
+            Image rocket = new Image(rocketTxt);
+            final Image shadow = new Image(rocketTxt);
+            shadow.setColor(Color.BLACK);
+            float aspectRatio = rocket.getWidth()/rocket.getHeight();
+            rocket.setBounds(cellBg.getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), cellBg.getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
+            shadow.setBounds(cellBg.getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), cellBg.getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
+            label = new Label(String.valueOf(price), new Label.LabelStyle(Resource.font, Color.YELLOW));
+            label.setPosition(cellBg.getX() + WIDTH/2 - label.getWidth()/2, cellBg.getY() + HEIGHT/15);
+            this.addActor(cellBg);
+            this.addActor(rocket);
+            this.addActor(shadow);
+            this.addActor(label);
+//        float aspectRatio = rocket.getWidth()/rocket.getHeight();
+//        rocket.setBounds(getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
+//        label.setPosition(getX() + WIDTH/7, getY() + HEIGHT/15);
+            this.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(starsCount > price) {
+                        starsCount -= price;
+                        pref.putInteger("stars", starsCount);
+                        pref.flush();
+                        label.setText("sold");
+                        label.setStyle(new Label.LabelStyle(Resource.font, Color.GREEN));
+                        shadow.remove();
+                        starsCountLabel.setText(String.valueOf(pref.getInteger("stars")));
+                    } else {
+                        stage.addActor(dialog);
+                        dialog.show(stage);
+                    }
                 }
             });
         }

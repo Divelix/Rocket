@@ -38,9 +38,9 @@ public class PlayScreen implements Screen, InputProcessor {
 
     public static final int DISTANCE = 300;
     private static final int PAUSE_BTN_SIZE = 50;
-    public static int bestScore, stars, score = 0;
+    public static int score = 0;
     private boolean pause = false;
-    private static Game game;
+    private Game game;
     public static OrthographicCamera camera;
     private SpriteBatch batch;
     private Viewport view;
@@ -54,7 +54,7 @@ public class PlayScreen implements Screen, InputProcessor {
 //    private Window backWindow;
 
 
-    public PlayScreen(Game game) {
+    public PlayScreen(final Game game) {
         this.game = game;
         Gdx.input.setCatchBackKey(true);
     }
@@ -69,7 +69,7 @@ public class PlayScreen implements Screen, InputProcessor {
         stage = new Stage(view, batch);
 
         Image landscape = new Image(new TextureRegion(Resource.landscape));
-        scoreLabel = new Label("Score: " + score, new Label.LabelStyle(Resource.font, Color.RED));
+        scoreLabel = new Label("Score: " + score, new Label.LabelStyle(Resource.font, Color.YELLOW));
         scoreHeight = camera.position.y + 320;
         scoreLabel.setPosition(0, scoreHeight);
 
@@ -82,7 +82,7 @@ public class PlayScreen implements Screen, InputProcessor {
             }
         });
 
-        dialog = new Dialog("", skin){
+        dialog = new Dialog("", skin) {
             @Override
             protected void result(Object object) {
                 if(object.equals(true)) {
@@ -93,13 +93,13 @@ public class PlayScreen implements Screen, InputProcessor {
                 }
             }
         };
-        dialog.pad(20, 20, 20, 20);
         dialog.text("Quit?");
         dialog.button("Yes", true);
         dialog.button("No", false);
         dialog.key(Input.Keys.ENTER, true);
         dialog.key(Input.Keys.ESCAPE, false);
 
+        dialog.pad(20, 20, 20, 20);
         dialog.getButtonTable().padTop(30);
         dialog.setModal(true);
         dialog.setMovable(true);
@@ -131,8 +131,6 @@ public class PlayScreen implements Screen, InputProcessor {
         stage.addActor(star3);
         stage.addActor(scoreLabel);
         stage.addActor(pauseBtn);
-//        stage.addActor(dialog);
-//        stage.addActor(backWindow);
         stage.setDebugAll(true);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -149,24 +147,24 @@ public class PlayScreen implements Screen, InputProcessor {
         batch.setProjectionMatrix(camera.combined);
         changeBgColor();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            if(!pause) pause();
-            dialog.setPosition(Main.WIDTH/2-dialog.getWidth()/2, camera.position.y-Main.HEIGHT/5);
-            stage.addActor(dialog);
-            dialog.show(stage);
-        }
-
         if(!pause) stage.act(delta);
 //        stage.getViewport().apply();
         view.apply();
         stage.draw();
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            if(!pause) pause();
+            dialog.setPosition(Main.WIDTH/2-dialog.getWidth()/2, rocket.getY());
+            stage.addActor(dialog);
+            dialog.show(stage);
+        }
+
         changeCameraPosition();
         camera.update();
-        scoreLabel.setText("Score: " + score + " | " + camera.position.x + ", " + camera.position.y);
-//        if(rocket.getPosition().y < camera.position.y - camera.viewportHeight/2) {
-//            gameOver();
-//        }
+        scoreLabel.setText("Score: " + score + " | " + rocket.getSpeedLimit() + " | " + rocket.getY());
+        if(rocket.getY() < camera.position.y - camera.viewportHeight/2 || rocket.getY() <= 100) {
+            gameOver();
+        }
     }
 
     @Override
@@ -178,9 +176,9 @@ public class PlayScreen implements Screen, InputProcessor {
 
     @Override
     public void pause() {
+        Gdx.app.log("RocketLogs", "PlayScreen - pause");
         if(!pause) {
             pause = true;
-            Gdx.app.log("RocketLogs", "PlayScreen - pause");
             pauseLabel = new Label("PAUSE", new Label.LabelStyle(Resource.robotoThinFont, Color.WHITE));
             pauseLabel.setPosition(Main.WIDTH / 2 - pauseLabel.getWidth() / 2, camera.position.y + Main.HEIGHT / 5);
             stage.addActor(pauseLabel);
@@ -198,16 +196,18 @@ public class PlayScreen implements Screen, InputProcessor {
     @Override
     public void hide() {
         Gdx.app.log("RocketLogs", "PlayScreen - hide");
+        dispose();
     }
 
     @Override
     public void dispose() {
+        Gdx.app.log("PlayScreen", "PlayScreen - dispose");
         stage.dispose();
         batch.dispose();
     }
 
     private void changeCameraPosition() {
-        if(rocket.getPosition().y > 250) {
+        if(rocket.getY() > 250) {
             camera.position.y = rocket.getMaxHeight() + 150;
             scoreHeight = camera.position.y + 320;
             scoreLabel.setPosition(0, scoreHeight);
@@ -217,24 +217,25 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void changeBgColor() {
         if(reducer >= 0.1) {
-            reducer = 1 - rocket.getMaxHeight() / 10000;
+            reducer = 1 - rocket.getMaxHeight() / 100000;
         }
         if(rocket.getMaxHeight() > 7000 && dimmer > 0.1) {
-            dimmer = 1 - (rocket.getMaxHeight() - 7000) / 10000;
+            dimmer = 1 - (rocket.getMaxHeight() - 7000) / 100000;
         }
     }
 
     private void gameOver() {
         rocket.setMaxHeight(0);
         Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
-        bestScore = pref.getInteger("bestScore");
+        int bestScore = pref.getInteger("bestScore");
         if(bestScore < score) {
             pref.putInteger("bestScore", score);
         }
-        stars = pref.getInteger("stars");
+        int stars = pref.getInteger("stars");
         pref.putInteger("stars", stars+score);
         pref.flush();
         score = 0;
+        rocket.setSpeedLimit(300);
         game.setScreen(new MenuScreen(game));
     }
 //-----------------------------------------GESTURES------------------------------------------
@@ -272,7 +273,7 @@ public class PlayScreen implements Screen, InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         camera.unproject(touchPosition.set(screenX, screenY, 0));
-        rocket.position.x = touchPosition.x;
+        rocket.setX(touchPosition.x);
 //        int delta = MathUtils.round(touchPosition.x - prevX);
 //        Gdx.app.log("RocketLogs", "PlayScreen delta - " + delta);
 //        rocket.rotate(-delta);

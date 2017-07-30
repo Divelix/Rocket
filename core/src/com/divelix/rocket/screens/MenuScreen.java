@@ -30,19 +30,20 @@ import static com.divelix.rocket.Resource.skin;
  */
 
 public class MenuScreen implements Screen {
+
     private static final int LOGO_WIDTH = 400;
     private static final int PLAY_BTN_SIZE = 240;
     private static final int MENU_BTN_SIZE = 100;
     private static final int STAR_SIZE = 75;
     private static final int STAR_Y = 150;
-    public static int bestScore;
-    public static int starsCount;
+    private int bestScore;
+    private int starsCount;
     private Game game;
     private Viewport view;
     private Stage stage;
     private Dialog dialog;
 
-    public MenuScreen(Game game) {
+    public MenuScreen(final Game game) {
         this.game = game;
         Gdx.input.setCatchBackKey(true);
         Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
@@ -168,7 +169,6 @@ public class MenuScreen implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             stage.addActor(dialog);
             dialog.show(stage);
-//            Gdx.app.exit();
         }
     }
 
@@ -191,6 +191,7 @@ public class MenuScreen implements Screen {
     @Override
     public void hide() {
         Gdx.app.log("RocketLogs", "MenuScreen - hide");
+        dispose();
     }
 
     @Override
