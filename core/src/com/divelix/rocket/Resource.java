@@ -1,6 +1,7 @@
 package com.divelix.rocket;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -9,12 +10,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.OrderedMap;
 
 /**
  * Created by Sergei Sergienko on 07.02.2017.
  */
 
 public class Resource {
+    public static final Preferences prefs = Gdx.app.getPreferences("com.divelix.rocket");
     private static TextureAtlas skinPack;
     private static TextureAtlas rocketPack;
     private static TextureAtlas gamePack;
@@ -28,8 +31,8 @@ public class Resource {
             cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9,
             missile;
     public static BitmapFont font, robotoThinFont;
-    public static Array<TextureRegion> rockets2 = new Array<TextureRegion>();
-    public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
+//    public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
+    public static ArrayMap<String, TextureRegion> rockets = new ArrayMap<String, TextureRegion>();
     public static Skin skin;
 
     public static void load() {
@@ -66,15 +69,15 @@ public class Resource {
         rocket = new TextureRegion(rocketPack.findRegion("rocket"));
         doubleGreenRocket = new TextureRegion(rocketPack.findRegion("doubleGreenRocket"));
         greenRocket = new TextureRegion(rocketPack.findRegion("greenRocket"));
-        shuttleRocket = new TextureRegion(rocketPack.findRegion("shattleRocket"));
+        shuttleRocket = new TextureRegion(rocketPack.findRegion("shattleRocket"));//TODO typo (shuttle)
         smallRocket = new TextureRegion(rocketPack.findRegion("smallRocket"));
         yellowRocket = new TextureRegion(rocketPack.findRegion("yellowRocket"));
-        rockets.put(rocket, 100);
-        rockets.put(doubleGreenRocket, 200);
-        rockets.put(greenRocket, 300);
-        rockets.put(shuttleRocket, 400);
-        rockets.put(smallRocket, 500);
-        rockets.put(yellowRocket, 600);
+        rockets.put("Original", rocket);
+        rockets.put("Alien", doubleGreenRocket);
+        rockets.put("Despicable", greenRocket);
+        rockets.put("Shuttle", shuttleRocket);
+        rockets.put("Colibri", smallRocket);
+        rockets.put("Lemon", yellowRocket);
 
         cellBg = new TextureRegion(skinPack.findRegion("cellBg"));
 

@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.divelix.rocket.Main;
 import com.divelix.rocket.Resource;
 
+import static com.divelix.rocket.Resource.prefs;
+
 /**
  * Created by Sergei Sergienko on 09.02.2017.
  */
@@ -31,7 +33,7 @@ public class Rocket extends Actor {
     public Rocket() {
         position = new Vector2(0, 0);
         velocity = new Vector2(0, 0);
-        sprite = new Sprite(Resource.rocket);
+        sprite = new Sprite(Resource.rockets.get(prefs.getString("ActiveRocket")));
 //        sprite.setColor(Color.BLACK);
         float aspectRatio = sprite.getHeight()/sprite.getWidth();
         setBounds(position.x, position.y, ROCKET_WIDTH, ROCKET_WIDTH * aspectRatio);

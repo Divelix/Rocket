@@ -1,6 +1,8 @@
 package com.divelix.rocket;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.divelix.rocket.screens.MenuScreen;
 
 public class Main extends Game {
@@ -11,6 +13,16 @@ public class Main extends Game {
 	@Override
 	public void create () {
 		Resource.load();
+		final Preferences prefs = Gdx.app.getPreferences("com.divelix.rocket");
+		prefs.putInteger("stars", 500);
+		prefs.putBoolean("Alien", false);
+		prefs.putBoolean("Despicable", false);
+		prefs.putBoolean("Colibri", false);
+		if(!prefs.getBoolean("Original"))
+			prefs.putBoolean("Original", true);
+		if(prefs.getString("ActiveRocket").equals(""))
+			prefs.putString("ActiveRocket", "Original");
+		prefs.flush();
 		setScreen(new MenuScreen(this));
 	}
 

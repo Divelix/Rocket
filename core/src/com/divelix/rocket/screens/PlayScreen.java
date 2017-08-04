@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -28,6 +27,7 @@ import com.divelix.rocket.actors.Cloud;
 import com.divelix.rocket.actors.Rocket;
 import com.divelix.rocket.actors.Star;
 
+import static com.divelix.rocket.Resource.prefs;
 import static com.divelix.rocket.Resource.skin;
 
 /**
@@ -226,14 +226,13 @@ public class PlayScreen implements Screen, InputProcessor {
 
     private void gameOver() {
         rocket.setMaxHeight(0);
-        Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
-        int bestScore = pref.getInteger("bestScore");
+        int bestScore = prefs.getInteger("bestScore");
         if(bestScore < score) {
-            pref.putInteger("bestScore", score);
+            prefs.putInteger("bestScore", score);
         }
-        int stars = pref.getInteger("stars");
-        pref.putInteger("stars", stars+score);
-        pref.flush();
+        int stars = prefs.getInteger("stars");
+        prefs.putInteger("stars", stars+score);
+        prefs.flush();
         score = 0;
         rocket.setSpeedLimit(300);
         game.setScreen(new MenuScreen(game));

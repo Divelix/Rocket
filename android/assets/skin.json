@@ -12,7 +12,7 @@
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
     "dialogDim": { "name": "whitePixel", "color": "whiteT" },
     "dialogBtnBgDown": { "name": "dialogBtnBg", "color": "whiteT" },
-    "transparent": { "name": "dialogBtnBg", "color": "transparent" }
+    "transparent": { "name": "whitePixel", "color": "transparent" }
   },
 
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {

@@ -3,7 +3,6 @@ package com.divelix.rocket.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,15 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.Main;
 import com.divelix.rocket.Resource;
 
+import static com.divelix.rocket.Resource.prefs;
 import static com.divelix.rocket.Resource.skin;
 
 /**
@@ -46,9 +44,8 @@ public class MenuScreen implements Screen {
     public MenuScreen(final Game game) {
         this.game = game;
         Gdx.input.setCatchBackKey(true);
-        Preferences pref = Gdx.app.getPreferences("com.divelix.rocket");
         try {
-            bestScore = pref.getInteger("bestScore");
+            bestScore = prefs.getInteger("bestScore");
             System.out.println("Best score: " + bestScore);
         }
         catch (NullPointerException e) {
@@ -57,7 +54,7 @@ public class MenuScreen implements Screen {
         }
 
         try {
-            starsCount = pref.getInteger("stars");
+            starsCount = prefs.getInteger("stars");
             System.out.println("Stars: " + starsCount);
         }
         catch (NullPointerException e) {

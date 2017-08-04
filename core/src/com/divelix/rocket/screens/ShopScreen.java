@@ -7,7 +7,6 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.Main;
 import com.divelix.rocket.Resource;
 
+import static com.divelix.rocket.Resource.prefs;
 import static com.divelix.rocket.Resource.skin;
 
 /**
@@ -39,12 +39,10 @@ public class ShopScreen implements Screen {
     private Dialog dialog;
     private int starsCount;
     private static Label starsCountLabel;
-    private Preferences pref;
 
     public ShopScreen(final Game game) {
         this.game = game;
         Gdx.input.setCatchBackKey(true);
-        pref = Gdx.app.getPreferences("com.divelix.rocket");
     }
 
     @Override
@@ -54,7 +52,7 @@ public class ShopScreen implements Screen {
         stage = new Stage(view);
         Gdx.input.setInputProcessor(stage);
         try {
-            starsCount = pref.getInteger("stars");
+            starsCount = prefs.getInteger("stars");
             System.out.println("Stars: " + starsCount);
         }
         catch (NullPointerException e) {
@@ -73,7 +71,7 @@ public class ShopScreen implements Screen {
 
         //SHOP TABLE
         for (int i = 1; i <= Resource.rockets.size; i++) {
-            rocketTable.add(new ShopCell(Resource.rockets.getKeyAt(i-1), Resource.rockets.getValueAt(i-1))).width(100).pad(15);
+            rocketTable.add(new ShopCell(Resource.rockets.getKeyAt(i-1), i*100)).width(100).pad(15);
             if(i % 3 == 0) rocketTable.row();
         }
 
@@ -213,23 +211,27 @@ public class ShopScreen implements Screen {
     private class ShopCell extends Group {
         private Label label;
 
-        private ShopCell(TextureRegion rocketTxt, final int price) {
+        private ShopCell(final String rocketName, final int price) {
             final float WIDTH = 100;
             final float HEIGHT = 150;
             this.setSize(WIDTH, HEIGHT);
             Image cellBg = new Image(Resource.cellBg);
             cellBg.setSize(WIDTH, HEIGHT);
-            Image rocket = new Image(rocketTxt);
-            final Image shadow = new Image(rocketTxt);
+            Image rocket = new Image(Resource.rockets.get(rocketName));
+            final Image shadow = new Image(Resource.rockets.get(rocketName));
             shadow.setColor(Color.BLACK);
             float aspectRatio = rocket.getWidth()/rocket.getHeight();
             rocket.setBounds(cellBg.getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), cellBg.getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
             shadow.setBounds(cellBg.getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), cellBg.getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
-            label = new Label(String.valueOf(price), new Label.LabelStyle(Resource.font, Color.YELLOW));
+            label = new Label(String.valueOf(price), new Label.LabelStyle(Resource.robotoThinFont, Color.YELLOW));
+            if(prefs.getBoolean(rocketName)) {
+                label.setText("-");
+            }
             label.setPosition(cellBg.getX() + WIDTH/2 - label.getWidth()/2, cellBg.getY() + HEIGHT/15);
             this.addActor(cellBg);
             this.addActor(rocket);
-            this.addActor(shadow);
+            if(!prefs.getBoolean(rocketName))
+                this.addActor(shadow);
             this.addActor(label);
 //        float aspectRatio = rocket.getWidth()/rocket.getHeight();
 //        rocket.setBounds(getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
@@ -237,14 +239,23 @@ public class ShopScreen implements Screen {
             this.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(starsCount > price) {
+                    if(!prefs.getBoolean(rocketName) && starsCount >= price) {
                         starsCount -= price;
-                        pref.putInteger("stars", starsCount);
-                        pref.flush();
-                        label.setText("sold");
-                        label.setStyle(new Label.LabelStyle(Resource.font, Color.GREEN));
+                        prefs.putBoolean(rocketName, true);
+                        Gdx.app.log("RocketPrefs", "New rocket - " + rocketName);
+                        prefs.putString("ActiveRocket", rocketName);
+                        Gdx.app.log("RocketPrefs", "ActiveRocket = " + rocketName);
+                        prefs.putInteger("stars", starsCount);
+                        prefs.flush();
+                        label.setText("+");
+                        label.setStyle(new Label.LabelStyle(Resource.robotoThinFont, Color.GREEN));
                         shadow.remove();
-                        starsCountLabel.setText(String.valueOf(pref.getInteger("stars")));
+                        starsCountLabel.setText(String.valueOf(prefs.getInteger("stars")));
+                    } else if(prefs.getBoolean(rocketName)) {
+                        prefs.putString("ActiveRocket", rocketName);
+                        Gdx.app.log("RocketPrefs", "ActiveRocket = " + rocketName);
+                        label.setText("+");
+                        label.setStyle(new Label.LabelStyle(Resource.robotoThinFont, Color.GREEN));
                     } else {
                         stage.addActor(dialog);
                         dialog.show(stage);
