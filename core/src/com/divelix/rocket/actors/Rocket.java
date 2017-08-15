@@ -2,7 +2,7 @@ package com.divelix.rocket.actors;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.divelix.rocket.Main;
@@ -16,31 +16,37 @@ import static com.divelix.rocket.Resource.prefs;
 
 public class Rocket extends Actor {
 
-    private static final int GRAVITY = -15;
+    private static final int ROCKET_HEIGHT = 80;
     private static final int START_HEIGHT = 110;
-    private static final int ROCKET_WIDTH = 50;
+    private  static  final int DEFAULT_SPEED_LIMIT_X = 400;
+    private static final int GRAVITY = -15;
 //    private static final int VELOCITY = 250;
 //    private static final int MAX_ANGLE = 30;
 //    public static final int JUMP_HEIGHT = 450;
     private static float maxHeight = 0;
-    private static int speedLimit = 300;
+    private static int speedLimitX = DEFAULT_SPEED_LIMIT_X;
+    private static int speedLimitY = 300;
+    public boolean isControlled;
     private Vector2 position;
     private Vector2 velocity;
-//    private Rectangle bounds;
-    private Circle bounds;
+    private Rectangle bounds;
+//    private Circle bounds;
     private Sprite sprite;
+    private float forceX;
 
     public Rocket() {
         position = new Vector2(0, 0);
         velocity = new Vector2(0, 0);
+        forceX = 0;
         sprite = new Sprite(Resource.rockets.get(prefs.getString("ActiveRocket")));
 //        sprite.setColor(Color.BLACK);
-        float aspectRatio = sprite.getHeight()/sprite.getWidth();
-        setBounds(position.x, position.y, ROCKET_WIDTH, ROCKET_WIDTH * aspectRatio);
+        float aspectRatio = sprite.getWidth()/sprite.getHeight();
+        setBounds(position.x, position.y, ROCKET_HEIGHT * aspectRatio, ROCKET_HEIGHT);
         sprite.setBounds(getX(), getY(), getWidth(), getHeight());
         sprite.setOriginCenter();
-//        bounds = new Rectangle(getX()+(getWidth()/6), getY()+(getHeight()/6), getWidth()/6*4, getHeight()/6*4);
-        bounds = new Circle(getX() + getWidth()/2, getY() + getHeight()/2, getWidth()/2);
+        setOrigin(getWidth()/2, getHeight()/2);
+        bounds = new Rectangle(getX()+(getWidth()/8), getY()+(getHeight()/8), getWidth()/8*6, getHeight()/8*6);
+//        bounds = new Circle(getX() + getWidth()/2, getY() + getHeight()/2, getWidth()/2);
         position.set(Main.WIDTH/2 - getWidth()/2, START_HEIGHT);
     }
 
@@ -54,28 +60,15 @@ public class Rocket extends Actor {
     public float getY() { return position.y; }
     public void setY(float y) { position.y = y; }
 
-    public int getSpeedLimit() { return speedLimit; }
-    public void setSpeedLimit(int speed) { speedLimit = speed; }
+    public int getSpeedLimit() { return speedLimitY; }
+    public void setSpeedLimit(int speed) { speedLimitY = speed; }
 
-    public void increaseSpeedLimit() { speedLimit += 10; }
-    public void decreaseSpeedLimit() { speedLimit -= 10; }
+    public void setForceX(float forceX) {this.forceX = forceX * 2;}
 
-    public Circle getBounds() { return bounds; }
+    public void increaseSpeedLimitY() { speedLimitY += 20; }
+    public void decreaseSpeedLimitY() { speedLimitY -= velocity.y * 0.1f + 5; }
 
-//    public void moveLeft() {
-//        velocity.x = -VELOCITY;
-////        sprite.setRotation(MAX_ANGLE);
-//    }
-//
-//    public void moveRight() {
-//        velocity.x = VELOCITY;
-////        sprite.setRotation(-MAX_ANGLE);
-//    }
-//
-//    public void resetMove() {
-//        velocity.x = 0;
-//        sprite.setRotation(0);
-//    }
+    public Rectangle getBounds() { return bounds; }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -86,37 +79,53 @@ public class Rocket extends Actor {
     @Override
     public void act(float delta) {
         if(position.y > 100)
-            velocity.add(0, GRAVITY);
+            velocity.add(forceX, GRAVITY);
         velocity.scl(delta);
         position.add(velocity.x, velocity.y);
-        if(position.y < 100)
-            position.y = 100;
+//        if(position.y < 100)
+//            position.y = 100;
 
         velocity.scl(1 / delta);
         if(position.y > maxHeight)
             maxHeight = position.y;
 
-//        if(position.x > Main.WIDTH)
-//            position.x = Main.WIDTH;
-//        if(position.x < 0 - this.getWidth())
-//            position.x = 0 - this.getWidth();
+        if(position.x > Main.WIDTH)
+            position.x = Main.WIDTH;
+        if(position.x < 0 - this.getWidth())
+            position.x = 0 - this.getWidth();
 
 //        if(Gdx.input.isTouched()) {
 //            velocity.y += 15;
 //        }
         velocity.y += 20;
 
-        //Speed limit down
-        if(velocity.y <= -1000)
-            velocity.y = -1000;
-        //Speed limit up
-        if(velocity.y > speedLimit)
-            velocity.y = speedLimit;
+        //Speed limiting
+        if(!isControlled) {
+            if(speedLimitX > 0)
+                speedLimitX -=10;
+        } else {
+            speedLimitX = DEFAULT_SPEED_LIMIT_X;
+        }
+        //X axis
+        if(velocity.x >= speedLimitX)
+            velocity.x = speedLimitX;
+        if(velocity.x <= -speedLimitX)
+            velocity.x = -speedLimitX;
+        //Y axis
+        if(velocity.y <= 0)
+            velocity.y -= 20;
+        //Speed limit
+        if(velocity.y > speedLimitY)
+            velocity.y = speedLimitY;
 
         this.setPosition(position.x, position.y);
-        sprite.setPosition(position.x, position.y);
-//        sprite.rotate(-velocity.x/100);//TODO rotate according to movement
-        bounds.setPosition(getX()+getWidth()/2, getY()+(getHeight()/2));
+        sprite.setPosition(getX(), getY());
+        if(isControlled) {
+            sprite.rotate(-forceX / 10);
+        } else {
+            sprite.setRotation(-velocity.x / 10);
+        }
+        bounds.setPosition(getX()+(getWidth()/8), getY()+(getHeight()/8));
         super.act(delta);
     }
 

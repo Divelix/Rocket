@@ -1,12 +1,13 @@
 package com.divelix.rocket.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.divelix.rocket.Main;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.divelix.rocket.Resource;
 import com.divelix.rocket.screens.PlayScreen;
 
@@ -46,8 +47,10 @@ public class Star extends Actor {
         sprite.rotate(DEGREES);
         if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds)) {
             position.y += PlayScreen.DISTANCE * 3;
+            PlayScreen.scoreLabel.addAction(Actions.sequence(Actions.color(Color.ORANGE, 0.05f), Actions.color(Color.YELLOW, 0.05f)));
+            PlayScreen.scoreWrapper.addAction(Actions.sequence(Actions.scaleBy(0.5f, 0.5f, 0.05f), Actions.scaleBy(-0.5f, -0.5f, 0.05f)));
             PlayScreen.score++;
-            PlayScreen.rocket.increaseSpeedLimit();
+            PlayScreen.rocket.increaseSpeedLimitY();
         }
         if(position.y < PlayScreen.camera.position.y - PlayScreen.camera.viewportHeight/2) {
             position.y += PlayScreen.DISTANCE * 3;

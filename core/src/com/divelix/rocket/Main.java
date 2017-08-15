@@ -17,10 +17,15 @@ public class Main extends Game {
 		prefs.putInteger("stars", 500);
 		prefs.putBoolean("Alien", false);
 		prefs.putBoolean("Despicable", false);
+		prefs.putBoolean("Shuttle", false);
 		prefs.putBoolean("Colibri", false);
+		prefs.putBoolean("Lemon", false);
+		prefs.putBoolean("Hawk", false);
+		prefs.putBoolean("Eagle", false);
+		prefs.putBoolean("Raven", false);
 		if(!prefs.getBoolean("Original"))
 			prefs.putBoolean("Original", true);
-		if(prefs.getString("ActiveRocket").equals(""))
+		if(!prefs.getBoolean(prefs.getString("ActiveRocket")) || prefs.getString("ActiveRocket").equals(""))
 			prefs.putString("ActiveRocket", "Original");
 		prefs.flush();
 		setScreen(new MenuScreen(this));

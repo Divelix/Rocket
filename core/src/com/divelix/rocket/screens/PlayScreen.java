@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -46,7 +47,9 @@ public class PlayScreen implements Screen, InputProcessor {
     private Viewport view;
     private Stage stage;
     private ImageButton pauseBtn;
-    private Label scoreLabel, pauseLabel;
+    public static Container<Label> scoreWrapper;
+    public static Label scoreLabel;
+    public Label scoreWordLabel, speedLabel, pauseLabel;
     public static Rocket rocket;
     private float reducer = 1, dimmer = 1;
     private float scoreHeight;
@@ -65,13 +68,22 @@ public class PlayScreen implements Screen, InputProcessor {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
+        scoreHeight = camera.position.y + 320;
         view = new FillViewport(Main.WIDTH, Main.HEIGHT, camera);
         stage = new Stage(view, batch);
 
         Image landscape = new Image(new TextureRegion(Resource.landscape));
-        scoreLabel = new Label("Score: " + score, new Label.LabelStyle(Resource.font, Color.YELLOW));
-        scoreHeight = camera.position.y + 320;
-        scoreLabel.setPosition(0, scoreHeight);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(Resource.robotoFont, Color.YELLOW);
+        scoreWordLabel = new Label("Score:  ", labelStyle);
+        scoreWordLabel.setPosition(0, scoreHeight);
+        scoreLabel = new Label("" + score, labelStyle);
+        scoreWrapper = new Container<Label>(scoreLabel);
+        scoreWrapper.setTransform(true);
+        scoreWrapper.setSize(scoreLabel.getWidth(), scoreLabel.getHeight());
+        scoreWrapper.setOrigin(scoreWrapper.getWidth()/2, scoreWrapper.getHeight()/2);
+        scoreWrapper.setPosition(scoreWordLabel.getWidth(), scoreHeight);
+        speedLabel = new Label("Speed: ", labelStyle);
+        speedLabel.setPosition(0, scoreHeight - 40);
 
         pauseBtn = new ImageButton(skin, "pause");
         pauseBtn.setBounds(Main.WIDTH - PAUSE_BTN_SIZE, scoreHeight, PAUSE_BTN_SIZE, PAUSE_BTN_SIZE);
@@ -94,8 +106,8 @@ public class PlayScreen implements Screen, InputProcessor {
             }
         };
         dialog.text("Quit?");
-        dialog.button("Yes", true);
-        dialog.button("No", false);
+        dialog.button("Yes     ", true);
+        dialog.button("     No", false);
         dialog.key(Input.Keys.ENTER, true);
         dialog.key(Input.Keys.ESCAPE, false);
 
@@ -129,7 +141,9 @@ public class PlayScreen implements Screen, InputProcessor {
         stage.addActor(star1);
         stage.addActor(star2);
         stage.addActor(star3);
-        stage.addActor(scoreLabel);
+        stage.addActor(scoreWordLabel);
+        stage.addActor(scoreWrapper);
+        stage.addActor(speedLabel);
         stage.addActor(pauseBtn);
         stage.setDebugAll(true);
 
@@ -154,14 +168,16 @@ public class PlayScreen implements Screen, InputProcessor {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             if(!pause) pause();
-            dialog.setPosition(Main.WIDTH/2-dialog.getWidth()/2, rocket.getY());
-            stage.addActor(dialog);
             dialog.show(stage);
+            dialog.setPosition(Main.WIDTH/2-dialog.getWidth()/2, camera.position.y - 50);
+            stage.addActor(dialog);
         }
 
         changeCameraPosition();
         camera.update();
-        scoreLabel.setText("Score: " + score + " | " + rocket.getSpeedLimit() + " | " + rocket.getY());
+//        scoreLabel.setText("Score: " + score + " | " + rocket.getSpeedLimit() + " | " + rocket.getY());
+        scoreLabel.setText("" + score);
+        speedLabel.setText("Speed: " + rocket.getSpeedLimit()/10);
         if(rocket.getY() < camera.position.y - camera.viewportHeight/2 || rocket.getY() <= 100) {
             gameOver();
         }
@@ -179,7 +195,7 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.app.log("RocketLogs", "PlayScreen - pause");
         if(!pause) {
             pause = true;
-            pauseLabel = new Label("PAUSE", new Label.LabelStyle(Resource.robotoThinFont, Color.WHITE));
+            pauseLabel = new Label("PAUSE", new Label.LabelStyle(Resource.robotoFont, Color.WHITE));
             pauseLabel.setPosition(Main.WIDTH / 2 - pauseLabel.getWidth() / 2, camera.position.y + Main.HEIGHT / 5);
             stage.addActor(pauseLabel);
         } else {
@@ -210,7 +226,9 @@ public class PlayScreen implements Screen, InputProcessor {
         if(rocket.getY() > 250) {
             camera.position.y = rocket.getMaxHeight() + 150;
             scoreHeight = camera.position.y + 320;
-            scoreLabel.setPosition(0, scoreHeight);
+            scoreWordLabel.setY(scoreHeight);
+            scoreWrapper.setY(scoreHeight);
+            speedLabel.setY(scoreHeight - speedLabel.getHeight());
             pauseBtn.setY(scoreHeight);
         }
     }
@@ -239,7 +257,7 @@ public class PlayScreen implements Screen, InputProcessor {
     }
 //-----------------------------------------GESTURES------------------------------------------
     private Vector3 touchPosition = new Vector3();
-//    private float prevX = Main.WIDTH/2;
+    private float prevX = Main.WIDTH/2;
     @Override
     public boolean keyDown(int keycode) {
         return false;
@@ -258,25 +276,26 @@ public class PlayScreen implements Screen, InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         camera.unproject(touchPosition.set(screenX, screenY, 0));
-//        rocket.position.x = screenX - rocket.getWidth()/2;
+        rocket.isControlled = true;
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         camera.unproject(touchPosition.set(screenX, screenY, 0));
-//        rocket.rotate(0);
+        rocket.isControlled = false;
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         camera.unproject(touchPosition.set(screenX, screenY, 0));
-        rocket.setX(touchPosition.x);
+//        rocket.setX(touchPosition.x - rocket.getWidth() / 2);
 //        int delta = MathUtils.round(touchPosition.x - prevX);
 //        Gdx.app.log("RocketLogs", "PlayScreen delta - " + delta);
-//        rocket.rotate(-delta);
-//        prevX = screenX;
+        rocket.setForceX(screenX - prevX);
+//        rocket.rotate(-delta * 2);
+        prevX = screenX;//TODO fix rotation
         return true;
     }
 

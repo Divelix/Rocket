@@ -12,9 +12,8 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useAccelerometer = false;
-		//!!!Gyroscope is disabled by default!!!
-//		config.useGyroscope = false;
 		config.useCompass = false;
+		config.useImmersiveMode = true;//Hides navigation bar
 		initialize(new Main(), config);
 	}
 }

@@ -6,128 +6,112 @@ filter: Nearest,Nearest
 repeat: none
 adsBtnDown
   rotate: false
-  xy: 518, 25
+  xy: 1690, 727
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 adsBtnUp
   rotate: false
-  xy: 1546, 747
+  xy: 2, 5
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 backArrow
   rotate: false
-  xy: 1804, 543
+  xy: 1586, 523
   size: 102, 460
   orig: 102, 460
   offset: 0, 0
   index: -1
-border10
+cellBgWhite
   rotate: false
-  xy: 2, 2
-  size: 21, 21
-  split: 10, 10, 10, 10
-  orig: 21, 21
+  xy: 1030, 483
+  size: 276, 500
+  orig: 276, 500
   offset: 0, 0
   index: -1
-border30
+cellBgYellow
   rotate: false
-  xy: 1908, 942
-  size: 61, 61
-  split: 29, 29, 29, 29
-  orig: 61, 61
-  offset: 0, 0
-  index: -1
-cellBg
-  rotate: false
-  xy: 1030, 619
-  size: 256, 384
-  orig: 256, 384
-  offset: 0, 0
-  index: -1
-dialogBtnBg
-  rotate: false
-  xy: 1030, 546
-  size: 143, 71
-  orig: 143, 71
+  xy: 1308, 483
+  size: 276, 500
+  orig: 276, 500
   offset: 0, 0
   index: -1
 leadBtnDown
   rotate: false
-  xy: 260, 25
+  xy: 804, 213
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 leadBtnUp
   rotate: false
-  xy: 2, 25
+  xy: 1062, 225
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 pause
   rotate: false
-  xy: 1804, 491
+  xy: 1948, 933
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 playBtnDown
   rotate: false
-  xy: 516, 491
+  xy: 516, 471
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 playBtnUp
   rotate: false
-  xy: 2, 491
+  xy: 2, 471
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 rateBtnDown
   rotate: false
-  xy: 1288, 747
+  xy: 1320, 225
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 rateBtnUp
   rotate: false
-  xy: 1546, 489
+  xy: 518, 5
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 rocketLogo
   rotate: false
-  xy: 2, 283
+  xy: 2, 263
   size: 800, 206
   orig: 800, 206
   offset: 0, 0
   index: -1
 shopBtnDown
   rotate: false
-  xy: 1288, 489
+  xy: 1690, 469
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shopBtnUp
   rotate: false
-  xy: 804, 233
+  xy: 260, 5
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 whitePixel
   rotate: false
-  xy: 776, 280
+  xy: 2, 2
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

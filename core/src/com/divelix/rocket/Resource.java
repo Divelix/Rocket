@@ -8,9 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.OrderedMap;
 
 /**
  * Created by Sergei Sergienko on 07.02.2017.
@@ -22,15 +20,15 @@ public class Resource {
     private static TextureAtlas rocketPack;
     private static TextureAtlas gamePack;
     public static TextureRegion landscape,
-            rocket, doubleGreenRocket, greenRocket, shuttleRocket, smallRocket, yellowRocket,
-            cellBg,
+            originalRocket, alienRocket, despicableRocket, shuttleRocket, colibriRocket, lemonRocket, hawkRocket, eagleRocket, ravenRocket,
+            cellBgWhite, cellBgYellow,
             whitePixel,
             star,
-            playBtnUp, playBtnDown, rateBtnUp, rateBtnDown, leadBtnUp, leadBtnDown, adsBtnUp, adsBtnDown, shopBtnUp, shopBtnDown, pauseOnBtn, pauseOffBtn, backArrow, frontArrow,
+            backArrow, frontArrow,
             rocketLogo,
             cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9,
             missile;
-    public static BitmapFont font, robotoThinFont;
+    public static BitmapFont font, robotoFont;
 //    public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
     public static ArrayMap<String, TextureRegion> rockets = new ArrayMap<String, TextureRegion>();
     public static Skin skin;
@@ -44,42 +42,31 @@ public class Resource {
 
         landscape = new TextureRegion(gamePack.findRegion("landscape"));
 
-//        playBtnUp = new TextureRegion(skinPack.findRegion("playBtnUp"));
-//        playBtnDown = new TextureRegion(skinPack.findRegion("playBtnDown"));
-//
-//        adsBtnUp = new TextureRegion(skinPack.findRegion("adsBtnUp"));
-//        adsBtnDown = new TextureRegion(skinPack.findRegion("adsBtnDown"));
-//
-//        shopBtnUp = new TextureRegion(skinPack.findRegion("shopBtnUp"));
-//        shopBtnDown = new TextureRegion(skinPack.findRegion("shopBtnDown"));
-//
-//        leadBtnUp = new TextureRegion(skinPack.findRegion("leadBtnUp"));
-//        leadBtnDown = new TextureRegion(skinPack.findRegion("leadBtnDown"));
-//
-//        rateBtnUp = new TextureRegion(skinPack.findRegion("rateBtnUp"));
-//        rateBtnDown = new TextureRegion(skinPack.findRegion("rateBtnDown"));
-
-//        pauseOnBtn = new TextureRegion(skinPack.findRegion("pauseOn"));
-//        pauseOffBtn = new TextureRegion(skinPack.findRegion("pauseOff"));
-
         backArrow = new TextureRegion(skinPack.findRegion("backArrow"));
         frontArrow = new TextureRegion(skinPack.findRegion("backArrow"));
         frontArrow.flip(true, false);
 
-        rocket = new TextureRegion(rocketPack.findRegion("rocket"));
-        doubleGreenRocket = new TextureRegion(rocketPack.findRegion("doubleGreenRocket"));
-        greenRocket = new TextureRegion(rocketPack.findRegion("greenRocket"));
-        shuttleRocket = new TextureRegion(rocketPack.findRegion("shattleRocket"));//TODO typo (shuttle)
-        smallRocket = new TextureRegion(rocketPack.findRegion("smallRocket"));
-        yellowRocket = new TextureRegion(rocketPack.findRegion("yellowRocket"));
-        rockets.put("Original", rocket);
-        rockets.put("Alien", doubleGreenRocket);
-        rockets.put("Despicable", greenRocket);
+        originalRocket = new TextureRegion(rocketPack.findRegion("originalRocket"));
+        alienRocket = new TextureRegion(rocketPack.findRegion("alienRocket"));
+        despicableRocket = new TextureRegion(rocketPack.findRegion("despicableRocket"));
+        shuttleRocket = new TextureRegion(rocketPack.findRegion("shuttleRocket"));
+        colibriRocket = new TextureRegion(rocketPack.findRegion("colibriRocket"));
+        lemonRocket = new TextureRegion(rocketPack.findRegion("lemonRocket"));
+        hawkRocket = new TextureRegion(rocketPack.findRegion("hawkRocket"));
+        eagleRocket = new TextureRegion(rocketPack.findRegion("eagleRocket"));
+        ravenRocket = new TextureRegion(rocketPack.findRegion("ravenRocket"));
+        rockets.put("Original", originalRocket);
+        rockets.put("Alien", alienRocket);
+        rockets.put("Despicable", despicableRocket);
         rockets.put("Shuttle", shuttleRocket);
-        rockets.put("Colibri", smallRocket);
-        rockets.put("Lemon", yellowRocket);
+        rockets.put("Colibri", colibriRocket);
+        rockets.put("Lemon", lemonRocket);
+        rockets.put("Hawk", hawkRocket);
+        rockets.put("Eagle", eagleRocket);
+        rockets.put("Raven", ravenRocket);
 
-        cellBg = new TextureRegion(skinPack.findRegion("cellBg"));
+        cellBgWhite = new TextureRegion(skinPack.findRegion("cellBgWhite"));
+        cellBgYellow = new TextureRegion(skinPack.findRegion("cellBgYellow"));
 
         whitePixel = new TextureRegion(skinPack.findRegion("whitePixel"));
 
@@ -101,16 +88,16 @@ public class Resource {
         missile = new TextureRegion(gamePack.findRegion("missile"));
 
         FreeTypeFontGenerator generatorDef = new FreeTypeFontGenerator(Gdx.files.internal("fonts/AGRevueCyrRoman.ttf"));
-        FreeTypeFontGenerator generatorRobotoThin = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Thin.ttf"));
+        FreeTypeFontGenerator generatorRoboto = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
         params.size = 24;
         font = generatorDef.generateFont(params);
         params.size = 40;
-        robotoThinFont = generatorRobotoThin.generateFont(params);
+        robotoFont = generatorRoboto.generateFont(params);
 
         skin = new Skin();
         skin.add("default-font", font, BitmapFont.class);
-        skin.add("roboto-thin-font", robotoThinFont, BitmapFont.class);
+        skin.add("roboto-thin-font", robotoFont, BitmapFont.class);
         FileHandle fileHandle = Gdx.files.internal("skin.json");
         FileHandle atlasFile = fileHandle.sibling("skin.atlas");
         if (atlasFile.exists()) {

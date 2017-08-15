@@ -1,47 +1,69 @@
 
 rocketPack.png
+size: 256,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-yellowRocket
+alienRocket
   rotate: false
-  xy: 2, 262
-  size: 111, 128
-  orig: 111, 128
+  xy: 185, 262
+  size: 62, 128
+  orig: 62, 128
   offset: 0, 0
   index: -1
-smallRocket
+colibriRocket
   rotate: false
   xy: 2, 132
   size: 101, 128
   orig: 101, 128
   offset: 0, 0
   index: -1
-shattleRocket
+despicableRocket
   rotate: false
-  xy: 115, 262
-  size: 91, 128
-  orig: 91, 128
+  xy: 187, 2
+  size: 54, 128
+  orig: 54, 128
   offset: 0, 0
   index: -1
-rocket
+eagleRocket
   rotate: false
-  xy: 2, 2
+  xy: 105, 132
+  size: 79, 128
+  orig: 79, 128
+  offset: 0, 0
+  index: -1
+hawkRocket
+  rotate: false
+  xy: 186, 132
+  size: 59, 128
+  orig: 59, 128
+  offset: 0, 0
+  index: -1
+lemonRocket
+  rotate: false
+  xy: 2, 262
+  size: 111, 128
+  orig: 111, 128
+  offset: 0, 0
+  index: -1
+originalRocket
+  rotate: false
+  xy: 95, 2
   size: 90, 128
   orig: 90, 128
   offset: 0, 0
   index: -1
-doubleGreenRocket
+ravenRocket
   rotate: false
-  xy: 105, 132
-  size: 62, 128
-  orig: 62, 128
+  xy: 115, 262
+  size: 68, 128
+  orig: 68, 128
   offset: 0, 0
   index: -1
-greenRocket
+shuttleRocket
   rotate: false
-  xy: 94, 2
-  size: 54, 128
-  orig: 54, 128
+  xy: 2, 2
+  size: 91, 128
+  orig: 91, 128
   offset: 0, 0
   index: -1

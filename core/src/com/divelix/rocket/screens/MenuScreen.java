@@ -31,7 +31,7 @@ public class MenuScreen implements Screen {
 
     private static final int LOGO_WIDTH = 400;
     private static final int PLAY_BTN_SIZE = 240;
-    private static final int MENU_BTN_SIZE = 100;
+    private static final int MENU_BTN_SIZE = 70;
     private static final int STAR_SIZE = 75;
     private static final int STAR_Y = 150;
     private int bestScore;
@@ -69,7 +69,7 @@ public class MenuScreen implements Screen {
 
         view = new FillViewport(Main.WIDTH, Main.HEIGHT);
 
-        Label bestScoreLabel = new Label("Best Score: " + bestScore, new Label.LabelStyle(Resource.robotoThinFont, Color.RED));
+        Label bestScoreLabel = new Label("Best Score: " + bestScore, new Label.LabelStyle(Resource.robotoFont, Color.RED));
 
         Image logo = new Image(Resource.rocketLogo);
         float aspectRatio = logo.getHeight() / logo.getWidth();
@@ -85,7 +85,7 @@ public class MenuScreen implements Screen {
 
         Image star = new Image(Resource.star);
         star.setBounds(Main.WIDTH/2-STAR_SIZE/2, STAR_Y, STAR_SIZE, STAR_SIZE);
-        Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoThinFont, Color.YELLOW));
+        Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoFont, Color.YELLOW));
         starsCountLabel.setPosition(Main.WIDTH/2-starsCountLabel.getWidth()/2, star.getY()-starsCountLabel.getHeight());
 
         ImageButton shopBtn = new ImageButton(skin, "shopBtn");
@@ -118,8 +118,8 @@ public class MenuScreen implements Screen {
             }
         };
         dialog.text("Exit?");
-        dialog.button("Yes", true);
-        dialog.button("No", false);
+        dialog.button("Yes     ", true);
+        dialog.button("     No", false);
 //        dialog.key(Input.Keys.ENTER, true);
 //        dialog.key(Input.Keys.ESCAPE, false);
 
@@ -163,7 +163,7 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
             stage.addActor(dialog);
             dialog.show(stage);
         }

@@ -62,7 +62,7 @@ public class Cloud extends Actor {
             Gdx.app.log("RocketLogs", "cloud has changed sprite");
         }
         if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds)) {
-            PlayScreen.rocket.decreaseSpeedLimit();
+//            PlayScreen.rocket.decreaseSpeedLimitY();
             Gdx.input.vibrate(100);
         }
 //            PlayScreen.gameOver();
