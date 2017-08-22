@@ -166,7 +166,7 @@ public class PlayScreen implements Screen, InputProcessor {
         view.apply();
         stage.draw();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK) || Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             if(!pause) pause();
             dialog.show(stage);
             dialog.setPosition(Main.WIDTH/2-dialog.getWidth()/2, camera.position.y - 50);
@@ -276,6 +276,7 @@ public class PlayScreen implements Screen, InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         camera.unproject(touchPosition.set(screenX, screenY, 0));
+        prevX = screenX;
         rocket.isControlled = true;
         return true;
     }
@@ -294,6 +295,7 @@ public class PlayScreen implements Screen, InputProcessor {
 //        int delta = MathUtils.round(touchPosition.x - prevX);
 //        Gdx.app.log("RocketLogs", "PlayScreen delta - " + delta);
         rocket.setForceX(screenX - prevX);
+        rocket.setTouchX(screenX);
 //        rocket.rotate(-delta * 2);
         prevX = screenX;//TODO fix rotation
         return true;

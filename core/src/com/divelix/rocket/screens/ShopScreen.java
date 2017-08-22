@@ -139,7 +139,7 @@ public class ShopScreen implements Screen {
         for(ShopCell cell : shopCells)
             if(!cell.getTitle().equals(activeRocket))
                 cell.cellBg.setDrawable(new TextureRegionDrawable(Resource.cellBgWhite));
-        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK) || Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
                 @Override
                 public void run() {

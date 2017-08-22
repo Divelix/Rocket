@@ -88,6 +88,14 @@ public class MenuScreen implements Screen {
         Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoFont, Color.YELLOW));
         starsCountLabel.setPosition(Main.WIDTH/2-starsCountLabel.getWidth()/2, star.getY()-starsCountLabel.getHeight());
 
+        ImageButton adsBtn = new ImageButton(skin, "adsBtn");
+        adsBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                adsBtnClicked();
+            }
+        });
+
         ImageButton shopBtn = new ImageButton(skin, "shopBtn");
         shopBtn.addListener(new ClickListener() {
             @Override
@@ -95,6 +103,9 @@ public class MenuScreen implements Screen {
                 shopBtnClicked();
             }
         });
+        Table menuButtonsTable = new Table();
+        menuButtonsTable.add(adsBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).pad(20, 10, 0, 10);
+        menuButtonsTable.add(shopBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).pad(20, 10, 0, 10);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -109,7 +120,7 @@ public class MenuScreen implements Screen {
         table.row();
         table.add(starsCountLabel);
         table.row();
-        table.add(shopBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).padTop(20);
+        table.add(menuButtonsTable);
 
         dialog = new Dialog("", skin){
             @Override
@@ -134,7 +145,7 @@ public class MenuScreen implements Screen {
 
         stage = new Stage(view);
         stage.addActor(table);
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -144,6 +155,15 @@ public class MenuScreen implements Screen {
             @Override
             public void run() {
                 game.setScreen(new PlayScreen(game));
+            }
+        })));
+    }
+
+    private void adsBtnClicked() {
+        stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                game.setScreen(new ShopScreen(game));
             }
         })));
     }
@@ -161,9 +181,10 @@ public class MenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0 / 255.0f, 156 / 255.0f, 225 / 255.0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        view.apply();
         stage.act(delta);
         stage.draw();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK) || Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             stage.addActor(dialog);
             dialog.show(stage);
         }

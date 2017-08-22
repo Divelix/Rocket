@@ -1,5 +1,6 @@
 package com.divelix.rocket.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,7 +20,7 @@ public class Rocket extends Actor {
     private static final int ROCKET_HEIGHT = 80;
     private static final int START_HEIGHT = 110;
     private  static  final int DEFAULT_SPEED_LIMIT_X = 400;
-    private static final int GRAVITY = -15;
+    private static final int DEFAULT_VELOCITY_Y = 20;
 //    private static final int VELOCITY = 250;
 //    private static final int MAX_ANGLE = 30;
 //    public static final int JUMP_HEIGHT = 450;
@@ -33,11 +34,13 @@ public class Rocket extends Actor {
 //    private Circle bounds;
     private Sprite sprite;
     private float forceX;
+    private float touchX;
 
     public Rocket() {
         position = new Vector2(0, 0);
         velocity = new Vector2(0, 0);
         forceX = 0;
+        touchX = 0;
         sprite = new Sprite(Resource.rockets.get(prefs.getString("ActiveRocket")));
 //        sprite.setColor(Color.BLACK);
         float aspectRatio = sprite.getWidth()/sprite.getHeight();
@@ -63,7 +66,16 @@ public class Rocket extends Actor {
     public int getSpeedLimit() { return speedLimitY; }
     public void setSpeedLimit(int speed) { speedLimitY = speed; }
 
-    public void setForceX(float forceX) {this.forceX = forceX * 2;}
+    public void setForceX(float forceX) {
+        if(forceX > 100) {
+            this.forceX = 100;
+        } else if(forceX < -100) {
+            this.forceX = -100;
+        } else {
+            this.forceX = forceX;
+        }
+    }
+    public void setTouchX(float touchX) {this.touchX = touchX;}
 
     public void increaseSpeedLimitY() { speedLimitY += 20; }
     public void decreaseSpeedLimitY() { speedLimitY -= velocity.y * 0.1f + 5; }
@@ -79,12 +91,9 @@ public class Rocket extends Actor {
     @Override
     public void act(float delta) {
         if(position.y > 100)
-            velocity.add(forceX, GRAVITY);
+            velocity.add(forceX * 5, DEFAULT_VELOCITY_Y);
         velocity.scl(delta);
         position.add(velocity.x, velocity.y);
-//        if(position.y < 100)
-//            position.y = 100;
-
         velocity.scl(1 / delta);
         if(position.y > maxHeight)
             maxHeight = position.y;
@@ -97,12 +106,14 @@ public class Rocket extends Actor {
 //        if(Gdx.input.isTouched()) {
 //            velocity.y += 15;
 //        }
-        velocity.y += 20;
 
         //Speed limiting
         if(!isControlled) {
-            if(speedLimitX > 0)
-                speedLimitX -=10;
+            if(speedLimitX > 0) {
+                speedLimitX -= 10;
+            } else {
+                speedLimitX = 0;
+            }
         } else {
             speedLimitX = DEFAULT_SPEED_LIMIT_X;
         }
@@ -121,9 +132,13 @@ public class Rocket extends Actor {
         this.setPosition(position.x, position.y);
         sprite.setPosition(getX(), getY());
         if(isControlled) {
-            sprite.rotate(-forceX / 10);
+//            sprite.rotate(-forceX / 10);
+//            Gdx.app.log("RocketLogs", "force = " + forceX);
+//            sprite.setRotation((position.x - touchX) / 4);
+            sprite.setRotation(-velocity.x / 15);
         } else {
-            sprite.setRotation(-velocity.x / 10);
+//            sprite.setRotation(-velocity.x / 10);
+            sprite.setRotation(0);
         }
         bounds.setPosition(getX()+(getWidth()/8), getY()+(getHeight()/8));
         super.act(delta);

@@ -2,6 +2,7 @@ package com.divelix.rocket;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,6 +32,7 @@ public class Resource {
     public static BitmapFont font, robotoFont;
 //    public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
     public static ArrayMap<String, TextureRegion> rockets = new ArrayMap<String, TextureRegion>();
+    public static Sound starSound;
     public static Skin skin;
 
     public static void load() {
@@ -104,6 +106,8 @@ public class Resource {
             skin.addRegions(new TextureAtlas(atlasFile));
         }
         skin.load(fileHandle);
+
+        starSound = Gdx.audio.newSound(Gdx.files.internal("audio/pisk.wav"));
     }
     public static void dispose() {
         gamePack.dispose();

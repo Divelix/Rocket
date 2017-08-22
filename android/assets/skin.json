@@ -25,6 +25,7 @@
   "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
     "playBtn": { "up": "playBtnUp", "down": "playBtnDown" },
     "shopBtn": { "up": "shopBtnUp", "down": "shopBtnDown" },
+    "adsBtn":  { "up": "adsBtnUp", "down": "adsBtnDown" },
     "pause":   { "up": "pause", "down": "pause" }
   },
 
