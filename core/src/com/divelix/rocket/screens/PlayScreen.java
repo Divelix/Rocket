@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.divelix.rocket.AdHandler;
 import com.divelix.rocket.Main;
 import com.divelix.rocket.Resource;
 import com.divelix.rocket.actors.Cloud;
@@ -37,11 +38,13 @@ import static com.divelix.rocket.Resource.skin;
 
 public class PlayScreen implements Screen, InputProcessor {
 
-    public static final int DISTANCE = 300;
+    private static final String TAG = "PlayScreen";
     private static final int PAUSE_BTN_SIZE = 50;
-    public static int score = 0;
-    private boolean pause = false;
+    public static final int DISTANCE = 300;
+
     private Game game;
+    private AdHandler handler;
+
     public static OrthographicCamera camera;
     private SpriteBatch batch;
     private Viewport view;
@@ -49,22 +52,25 @@ public class PlayScreen implements Screen, InputProcessor {
     private ImageButton pauseBtn;
     public static Container<Label> scoreWrapper;
     public static Label scoreLabel;
-    public Label scoreWordLabel, speedLabel, pauseLabel;
+    private Label scoreWordLabel, speedLabel, pauseLabel;
     public static Rocket rocket;
+    public static int score = 0;
     private float reducer = 1, dimmer = 1;
     private float scoreHeight;
+    private boolean pause = false;
     private Dialog dialog;
 //    private Window backWindow;
 
 
-    public PlayScreen(final Game game) {
+    public PlayScreen(final Game game, AdHandler handler) {
         this.game = game;
+        this.handler = handler;
         Gdx.input.setCatchBackKey(true);
     }
 
     @Override
     public void show() {
-        Gdx.app.log("RocketLogs", "PlayScreen - show");
+        Gdx.app.log(TAG, "PlayScreen - show");
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
@@ -185,14 +191,14 @@ public class PlayScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log("RocketLogs", "PlayScreen - resize");
+        Gdx.app.log(TAG, "PlayScreen - resize");
         view.update(width, height, false);
         camera.update();
     }
 
     @Override
     public void pause() {
-        Gdx.app.log("RocketLogs", "PlayScreen - pause");
+        Gdx.app.log(TAG, "PlayScreen - pause");
         if(!pause) {
             pause = true;
             pauseLabel = new Label("PAUSE", new Label.LabelStyle(Resource.robotoFont, Color.WHITE));
@@ -206,12 +212,12 @@ public class PlayScreen implements Screen, InputProcessor {
 
     @Override
     public void resume() {
-        Gdx.app.log("RocketLogs", "PlayScreen - resume");
+        Gdx.app.log(TAG, "PlayScreen - resume");
     }
 
     @Override
     public void hide() {
-        Gdx.app.log("RocketLogs", "PlayScreen - hide");
+        Gdx.app.log(TAG, "PlayScreen - hide");
         dispose();
     }
 
@@ -253,7 +259,7 @@ public class PlayScreen implements Screen, InputProcessor {
         prefs.flush();
         score = 0;
         rocket.setSpeedLimit(300);
-        game.setScreen(new MenuScreen(game));
+        game.setScreen(new MenuScreen(game, handler));
     }
 //-----------------------------------------GESTURES------------------------------------------
     private Vector3 touchPosition = new Vector3();
@@ -293,10 +299,9 @@ public class PlayScreen implements Screen, InputProcessor {
         camera.unproject(touchPosition.set(screenX, screenY, 0));
 //        rocket.setX(touchPosition.x - rocket.getWidth() / 2);
 //        int delta = MathUtils.round(touchPosition.x - prevX);
-//        Gdx.app.log("RocketLogs", "PlayScreen delta - " + delta);
-        rocket.setForceX(screenX - prevX);
-        rocket.setTouchX(screenX);
+//        Gdx.app.log(TAG, "PlayScreen delta - " + delta);
 //        rocket.rotate(-delta * 2);
+        rocket.setForceX(screenX - prevX);
         prevX = screenX;//TODO fix rotation
         return true;
     }

@@ -59,7 +59,6 @@ public class Cloud extends Actor {
             position.y += PlayScreen.DISTANCE * 3;
             position.x = MathUtils.random(0, 480);
             changeSprite();
-            Gdx.app.log("RocketLogs", "cloud has changed sprite");
         }
         if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds)) {
 //            PlayScreen.rocket.decreaseSpeedLimitY();

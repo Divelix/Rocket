@@ -26,6 +26,7 @@
     "playBtn": { "up": "playBtnUp", "down": "playBtnDown" },
     "shopBtn": { "up": "shopBtnUp", "down": "shopBtnDown" },
     "adsBtn":  { "up": "adsBtnUp", "down": "adsBtnDown" },
+    "rateBtn": { "up": "rateBtnUp", "down": "rateBtnDown" },
     "pause":   { "up": "pause", "down": "pause" }
   },
 

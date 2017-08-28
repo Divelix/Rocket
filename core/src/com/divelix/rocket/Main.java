@@ -6,12 +6,20 @@ import com.badlogic.gdx.Preferences;
 import com.divelix.rocket.screens.MenuScreen;
 
 public class Main extends Game {
+	public static final String TITLE = "Rocket";
+	private static final String TAG = "Main";
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 800;
-	public static final String TITLE = "Rocket";
-	
+
+	private AdHandler handler;
+
+	public Main(AdHandler handler) {
+		this.handler = handler;
+	}
+
 	@Override
 	public void create () {
+		Gdx.app.log(TAG, "create()");
 		Resource.load();
 		final Preferences prefs = Gdx.app.getPreferences("com.divelix.rocket");
 		prefs.putInteger("stars", 500);
@@ -28,7 +36,7 @@ public class Main extends Game {
 		if(!prefs.getBoolean(prefs.getString("ActiveRocket")) || prefs.getString("ActiveRocket").equals(""))
 			prefs.putString("ActiveRocket", "Original");
 		prefs.flush();
-		setScreen(new MenuScreen(this));
+		setScreen(new MenuScreen(this, handler));
 	}
 
 	@Override

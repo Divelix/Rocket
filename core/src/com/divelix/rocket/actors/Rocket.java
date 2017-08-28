@@ -19,7 +19,7 @@ public class Rocket extends Actor {
 
     private static final int ROCKET_HEIGHT = 80;
     private static final int START_HEIGHT = 110;
-    private  static  final int DEFAULT_SPEED_LIMIT_X = 400;
+    private static final int DEFAULT_SPEED_LIMIT_X = 400;
     private static final int DEFAULT_VELOCITY_Y = 20;
 //    private static final int VELOCITY = 250;
 //    private static final int MAX_ANGLE = 30;
@@ -34,13 +34,11 @@ public class Rocket extends Actor {
 //    private Circle bounds;
     private Sprite sprite;
     private float forceX;
-    private float touchX;
 
     public Rocket() {
         position = new Vector2(0, 0);
         velocity = new Vector2(0, 0);
         forceX = 0;
-        touchX = 0;
         sprite = new Sprite(Resource.rockets.get(prefs.getString("ActiveRocket")));
 //        sprite.setColor(Color.BLACK);
         float aspectRatio = sprite.getWidth()/sprite.getHeight();
@@ -75,7 +73,6 @@ public class Rocket extends Actor {
             this.forceX = forceX;
         }
     }
-    public void setTouchX(float touchX) {this.touchX = touchX;}
 
     public void increaseSpeedLimitY() { speedLimitY += 20; }
     public void decreaseSpeedLimitY() { speedLimitY -= velocity.y * 0.1f + 5; }
@@ -133,7 +130,7 @@ public class Rocket extends Actor {
         sprite.setPosition(getX(), getY());
         if(isControlled) {
 //            sprite.rotate(-forceX / 10);
-//            Gdx.app.log("RocketLogs", "force = " + forceX);
+//            Gdx.app.log(TAG, "velocity.x = " + velocity.x);
 //            sprite.setRotation((position.x - touchX) / 4);
             sprite.setRotation(-velocity.x / 15);
         } else {

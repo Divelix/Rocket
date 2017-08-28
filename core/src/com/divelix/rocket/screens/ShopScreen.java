@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.divelix.rocket.AdHandler;
 import com.divelix.rocket.Main;
 import com.divelix.rocket.Resource;
 
@@ -33,9 +34,12 @@ import static com.divelix.rocket.Resource.skin;
 
 public class ShopScreen implements Screen {
 
+    private static final String TAG = "ShopScreen";
     private static final int STAR_SIZE = 75;
 
     private Game game;
+    private AdHandler handler;
+
     private Viewport view;
     private Stage stage;
     private ArrayList<ShopCell> shopCells;
@@ -44,14 +48,15 @@ public class ShopScreen implements Screen {
     private static Label starsCountLabel;
     private String activeRocket;
 
-    public ShopScreen(final Game game) {
+    public ShopScreen(final Game game, AdHandler handler) {
         this.game = game;
+        this.handler = handler;
         Gdx.input.setCatchBackKey(true);
     }
 
     @Override
     public void show() {
-        Gdx.app.log("RocketLogs", "ShopScreen - show");
+        Gdx.app.log(TAG, "ShopScreen - show");
         view = new ExtendViewport(Main.WIDTH, Main.HEIGHT);
         stage = new Stage(view);
         Gdx.input.setInputProcessor(stage);
@@ -143,7 +148,7 @@ public class ShopScreen implements Screen {
             stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
                 @Override
                 public void run() {
-                    game.setScreen(new MenuScreen(game));
+                    game.setScreen(new MenuScreen(game, handler));
                 }
             })));
         }
@@ -151,29 +156,29 @@ public class ShopScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log("RocketLogs", "ShopScreen - resize");
+        Gdx.app.log(TAG, "ShopScreen - resize");
         view.update(width, height, false);
     }
 
     @Override
     public void pause() {
-        Gdx.app.log("RocketLogs", "ShopScreen - pause");
+        Gdx.app.log(TAG, "ShopScreen - pause");
     }
 
     @Override
     public void resume() {
-        Gdx.app.log("RocketLogs", "ShopScreen - resume");
+        Gdx.app.log(TAG, "ShopScreen - resume");
     }
 
     @Override
     public void hide() {
-        Gdx.app.log("RocketLogs", "ShopScreen - hide");
+        Gdx.app.log(TAG, "ShopScreen - hide");
         dispose();
     }
 
     @Override
     public void dispose() {
-        Gdx.app.log("RocketLogs", "ShopScreen - dispose");
+        Gdx.app.log(TAG, "ShopScreen - dispose");
         stage.dispose();
     }
 
@@ -191,7 +196,7 @@ public class ShopScreen implements Screen {
             super.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    game.setScreen(new MenuScreen(game));
+                    game.setScreen(new MenuScreen(game, handler));
                 }
             });
         }
@@ -212,7 +217,7 @@ public class ShopScreen implements Screen {
             super.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    game.setScreen(new PlayScreen(game));
+                    game.setScreen(new PlayScreen(game, handler));
                 }
             });
         }
