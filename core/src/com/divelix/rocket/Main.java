@@ -2,8 +2,9 @@ package com.divelix.rocket;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.divelix.rocket.screens.MenuScreen;
+
+import static com.divelix.rocket.Resource.prefs;
 
 public class Main extends Game {
 	public static final String TITLE = "Rocket";
@@ -21,7 +22,6 @@ public class Main extends Game {
 	public void create () {
 		Gdx.app.log(TAG, "create()");
 		Resource.load();
-		final Preferences prefs = Gdx.app.getPreferences("com.divelix.rocket");
 		prefs.putInteger("stars", 500);
 		prefs.putBoolean("Alien", false);
 		prefs.putBoolean("Despicable", false);

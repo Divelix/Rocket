@@ -7,12 +7,15 @@ import android.os.Message;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.divelix.rocket.screens.MenuScreen;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+
+import static com.divelix.rocket.Resource.prefs;
 
 public class AndroidLauncher extends AndroidApplication implements RewardedVideoAdListener, AdHandler {
 	private static final String TAG = "AndroidLauncher";
@@ -42,7 +45,7 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
 	}
 
 	private void loadAd() {
-		Gdx.app.log(TAG, "Loading ad video...");
+		Gdx.app.log(TAG, "Started video loading...");
 		if(!video.isLoaded()) {
 			video.loadAd("ca-app-pub-3940256099942544/5224354917", new AdRequest.Builder().build());
 		}
@@ -51,6 +54,7 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
 	@Override
 	public void onRewardedVideoAdLoaded() {
 		Gdx.app.log(TAG, "AdLoaded()");
+		MenuScreen.isLoaded = true;
 	}
 
 	@Override
@@ -66,13 +70,17 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
 	@Override
 	public void onRewardedVideoAdClosed() {
 		Gdx.app.log(TAG, "AdClosed()");
-		MenuScreen.START_COUNTING = true;
 		loadAd();
 	}
 
 	@Override
 	public void onRewarded(RewardItem rewardItem) {
 		Gdx.app.log(TAG, "onRewarded()");
+		int stars = prefs.getInteger("stars", 0);
+		prefs.putInteger("stars", stars + rewardItem.getAmount());
+		prefs.flush();
+		MenuScreen.startTime = TimeUtils.millis();
+		MenuScreen.startCounting = true;
 	}
 
 	@Override

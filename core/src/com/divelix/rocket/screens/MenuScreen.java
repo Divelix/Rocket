@@ -6,9 +6,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.AdHandler;
@@ -34,22 +35,25 @@ public class MenuScreen implements Screen {
     private static final String TAG = "MenuScreen";
     private static final int LOGO_WIDTH = 400;
     private static final int PLAY_BTN_SIZE = 240;
-    private static final int MENU_BTN_SIZE = 70;
+    private static final int MENU_BTN_SIZE = 80;
     private static final int STAR_SIZE = 75;
     private static final int STAR_Y = 150;
-    private static final int AD_VIDEO_DELAY = 10;//delay in seconds
+    private static final int AD_VIDEO_DELAY = 60;//delay in seconds
 
     private Game game;
     private AdHandler handler;
 
-    public static boolean START_COUNTING;
+    public static boolean startCounting;
+    public static boolean isLoaded;
+    public static long startTime;
+    private long adBreakTimer;
     private int bestScore;
     private int starsCount;
     private Viewport view;
     private Stage stage;
-    private ImageButton adsBtn;
+    private Label starsCountLabel;
+    private PopUp popUp;
     private Dialog dialog;
-    private float adTimer;
 
     public MenuScreen(final Game game, AdHandler handler) {
         this.game = game;
@@ -76,7 +80,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.app.log(TAG, "MenuScreen - show");
+        Gdx.app.log(TAG, "show()");
 
         view = new FillViewport(Main.WIDTH, Main.HEIGHT);
 
@@ -96,10 +100,11 @@ public class MenuScreen implements Screen {
 
         Image star = new Image(Resource.star);
         star.setBounds(Main.WIDTH/2-STAR_SIZE/2, STAR_Y, STAR_SIZE, STAR_SIZE);
-        Label starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoFont, Color.YELLOW));
+        starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoFont, Color.YELLOW));
         starsCountLabel.setPosition(Main.WIDTH/2-starsCountLabel.getWidth()/2, star.getY()-starsCountLabel.getHeight());
 
-        adsBtn = new ImageButton(skin, "adsBtn");
+
+        ImageButton adsBtn = new ImageButton(skin, "adsBtn");
         adsBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -123,9 +128,15 @@ public class MenuScreen implements Screen {
             }
         });
         Table menuButtonsTable = new Table();
-        menuButtonsTable.add(adsBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).pad(20, 10, 0, 10);
-        menuButtonsTable.add(shopBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).pad(20, 10, 0, 10);
-        menuButtonsTable.add(rateBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).pad(20, 10, 0, 10);
+        int topMargin = 20;
+        int sideMargin = 15;
+        menuButtonsTable.add(adsBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).pad(topMargin, sideMargin, 0, sideMargin);
+        menuButtonsTable.add(shopBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).pad(topMargin, sideMargin, 0, sideMargin);
+        menuButtonsTable.add(rateBtn).width(MENU_BTN_SIZE).height(MENU_BTN_SIZE).pad(topMargin, sideMargin, 0, sideMargin);
+//        timerLabel = new Label(String.valueOf(AD_VIDEO_DELAY), new Label.LabelStyle(Resource.robotoFont, Color.YELLOW));
+//        timerLabel.setPosition(110, 110);
+        popUp = new PopUp(130, 110);
+//        popUp.setVisible(false);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -171,6 +182,7 @@ public class MenuScreen implements Screen {
     }
 
     private void playBtnClicked() {
+        Gdx.app.log(TAG, "PlayBtn clicked");
         stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
             @Override
             public void run() {
@@ -181,12 +193,12 @@ public class MenuScreen implements Screen {
 
     private void adsBtnClicked() {
         Gdx.app.log(TAG, "AdsBtn clicked");
-        adTimer = 0;
-        handler.showAds(true);
-        adsBtn.setTouchable(Touchable.disabled);
+        if(!startCounting)
+            handler.showAds(true);
     }
 
     private void shopBtnClicked() {
+        Gdx.app.log(TAG, "ShopBtn clicked");
         stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
             @Override
             public void run() {
@@ -196,13 +208,18 @@ public class MenuScreen implements Screen {
     }
 
     private void rateBtnClicked() {
-        Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.divelix.rocket");//TODO change
+        Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.divelix.rocket");//TODO change (maybe)
     }
 
     @Override
     public void render(float delta) {
-        if(START_COUNTING) adTimer += delta;
-        if(adTimer >= AD_VIDEO_DELAY) adsBtn.setTouchable(Touchable.enabled);
+        if(isLoaded && popUp.getStage() == null) {
+            stage.addActor(popUp);
+        }
+        adBreakTimer = TimeUtils.timeSinceMillis(startTime) / 1000;
+        if(adBreakTimer >= AD_VIDEO_DELAY) {
+            startCounting = false;
+        }
 
         Gdx.gl.glClearColor(0 / 255.0f, 156 / 255.0f, 225 / 255.0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -229,6 +246,7 @@ public class MenuScreen implements Screen {
     @Override
     public void resume() {
         Gdx.app.log(TAG, "resume()");
+        starsCountLabel.setText(String.valueOf(prefs.getInteger("stars")));
     }
 
     @Override
@@ -241,5 +259,43 @@ public class MenuScreen implements Screen {
     public void dispose() {
         Gdx.app.log(TAG, "dispose()");
         stage.dispose();
+    }
+
+    private class PopUp extends Group {
+        Image bgBalloon;
+        Label text;
+        Image star;
+
+        private PopUp(int x, int y) {
+            this.setSize(115, 65);
+            this.setPosition(x - 57, y);
+            bgBalloon = new Image(Resource.popUp);
+            bgBalloon.setSize(this.getWidth(), this.getHeight());
+            text = new Label("Get 50", new Label.LabelStyle(Resource.smallerFont, Color.YELLOW));
+            text.setPosition(bgBalloon.getX() + 10, bgBalloon.getY() + 24);
+            star = new Image(Resource.star);
+            star.setScale(0.2f);
+            star.setPosition(text.getX() + text.getWidth() + 3, text.getY() + 3);
+
+            this.addActor(bgBalloon);
+            this.addActor(text);
+            this.addActor(star);
+        }
+
+        @Override
+        public void act(float delta) {
+            super.act(delta);
+            if(startCounting) {
+                if(star.getStage() != null) star.remove();
+                text.setText(String.valueOf(AD_VIDEO_DELAY - adBreakTimer));
+                text.setX(bgBalloon.getX() + 45);
+            } else {
+                if(star.getStage() == null) {
+                    text.setText("Get 50");
+                    text.setX(bgBalloon.getX() + 10);
+                    this.addActor(star);
+                }
+            }
+        }
     }
 }

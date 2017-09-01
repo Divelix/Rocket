@@ -56,7 +56,7 @@ public class ShopScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.app.log(TAG, "ShopScreen - show");
+        Gdx.app.log(TAG, "show()");
         view = new ExtendViewport(Main.WIDTH, Main.HEIGHT);
         stage = new Stage(view);
         Gdx.input.setInputProcessor(stage);
@@ -141,9 +141,6 @@ public class ShopScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
-        for(ShopCell cell : shopCells)
-            if(!cell.getTitle().equals(activeRocket))
-                cell.cellBg.setDrawable(new TextureRegionDrawable(Resource.cellBgWhite));
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK) || Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             stage.addAction(Actions.sequence(Actions.fadeOut(0.1f), Actions.run(new Runnable() {
                 @Override
@@ -156,29 +153,29 @@ public class ShopScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log(TAG, "ShopScreen - resize");
+        Gdx.app.log(TAG, "resize()");
         view.update(width, height, false);
     }
 
     @Override
     public void pause() {
-        Gdx.app.log(TAG, "ShopScreen - pause");
+        Gdx.app.log(TAG, "pause()");
     }
 
     @Override
     public void resume() {
-        Gdx.app.log(TAG, "ShopScreen - resume");
+        Gdx.app.log(TAG, "resume()");
     }
 
     @Override
     public void hide() {
-        Gdx.app.log(TAG, "ShopScreen - hide");
+        Gdx.app.log(TAG, "hide()");
         dispose();
     }
 
     @Override
     public void dispose() {
-        Gdx.app.log(TAG, "ShopScreen - dispose");
+        Gdx.app.log(TAG, "dispose()");
         stage.dispose();
     }
 
@@ -191,9 +188,9 @@ public class ShopScreen implements Screen {
             Label text = new Label("BACK", new Label.LabelStyle(Resource.robotoFont, Color.WHITE));
             text.setX(arrow.getX() + arrow.getWidth());
             setSize(text.getWidth()+arrow.getWidth(), arrowHeight);
-            super.addActor(arrow);
-            super.addActor(text);
-            super.addListener(new ClickListener() {
+            this.addActor(arrow);
+            this.addActor(text);
+            this.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     game.setScreen(new MenuScreen(game, handler));
@@ -212,9 +209,9 @@ public class ShopScreen implements Screen {
             text.setX(getX());
             arrow.setX(getX() + text.getWidth());
             setSize(text.getWidth()+arrow.getWidth(), arrowHeight);
-            super.addActor(text);
-            super.addActor(arrow);
-            super.addListener(new ClickListener() {
+            this.addActor(text);
+            this.addActor(arrow);
+            this.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     game.setScreen(new PlayScreen(game, handler));
@@ -230,11 +227,11 @@ public class ShopScreen implements Screen {
         final float WIDTH = 100;
         final float HEIGHT = 170;
 
-        public ShopCell(final String rocketName, final int price) {
+        private ShopCell(final String rocketName, final int price) {
             TITLE = rocketName;
             this.setSize(WIDTH, HEIGHT);
             cellBg = new Image(Resource.cellBgWhite);
-            if(activeRocket.equals(rocketName))
+            if(rocketName.equals(activeRocket))
                 cellBg.setDrawable(new TextureRegionDrawable(Resource.cellBgYellow));
             cellBg.setSize(WIDTH, HEIGHT);
             Image rocket = new Image(Resource.rockets.get(rocketName));
@@ -254,16 +251,13 @@ public class ShopScreen implements Screen {
                 label.setText("");
                 shadow.remove();
             }
-//        float aspectRatio = rocket.getWidth()/rocket.getHeight();
-//        rocket.setBounds(getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
-//        label.setPosition(getX() + WIDTH/7, getY() + HEIGHT/15);
             this.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if(!prefs.getBoolean(rocketName) && starsCount >= price) {
                         starsCount -= price;
                         prefs.putBoolean(rocketName, true);
-                        Gdx.app.log("RocketPrefs", "New rocket - " + rocketName);
+                        Gdx.app.log(TAG, "New rocket - " + rocketName);
                         prefs.putInteger("stars", starsCount);
                         prefs.flush();
                         makeRocketActive(rocketName);
@@ -271,23 +265,27 @@ public class ShopScreen implements Screen {
                         shadow.addAction(Actions.parallel(
                                 Actions.fadeOut(0.2f),
                                 Actions.scaleBy(0.3f, 0.3f, 0.2f)));
-//                        shadow.remove();
                         starsCountLabel.setText(String.valueOf(prefs.getInteger("stars")));
                     } else if(prefs.getBoolean(rocketName)) {
+                        Gdx.app.log(TAG, "Switch ActiveRocket to " + rocketName);
                         makeRocketActive(rocketName);
                     } else {
                         stage.addActor(dialog);
                         dialog.show(stage);
                     }
+                    for(ShopCell cell : shopCells)
+                        if(!cell.getTitle().equals(activeRocket))
+                            cell.cellBg.setDrawable(new TextureRegionDrawable(Resource.cellBgWhite));
                 }
             });
         }
-        public String getTitle() { return TITLE;}
+        private String getTitle() { return TITLE;}
 
         private void makeRocketActive(String rocketName) {
             activeRocket = rocketName;
             prefs.putString("ActiveRocket", rocketName);
-            Gdx.app.log("RocketPrefs", "ActiveRocket = " + rocketName);
+            prefs.flush();
+            Gdx.app.log(TAG, "ActiveRocket = " + rocketName);
             cellBg.setDrawable(new TextureRegionDrawable(Resource.cellBgYellow));
         }
     }

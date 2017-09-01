@@ -59,7 +59,6 @@ public class PlayScreen implements Screen, InputProcessor {
     private float scoreHeight;
     private boolean pause = false;
     private Dialog dialog;
-//    private Window backWindow;
 
 
     public PlayScreen(final Game game, AdHandler handler) {
@@ -70,7 +69,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        Gdx.app.log(TAG, "PlayScreen - show");
+        Gdx.app.log(TAG, "show()");
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
@@ -191,14 +190,14 @@ public class PlayScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log(TAG, "PlayScreen - resize");
+        Gdx.app.log(TAG, "resize()");
         view.update(width, height, false);
         camera.update();
     }
 
     @Override
     public void pause() {
-        Gdx.app.log(TAG, "PlayScreen - pause");
+        Gdx.app.log(TAG, "pause()");
         if(!pause) {
             pause = true;
             pauseLabel = new Label("PAUSE", new Label.LabelStyle(Resource.robotoFont, Color.WHITE));
@@ -212,12 +211,12 @@ public class PlayScreen implements Screen, InputProcessor {
 
     @Override
     public void resume() {
-        Gdx.app.log(TAG, "PlayScreen - resume");
+        Gdx.app.log(TAG, "resume()");
     }
 
     @Override
     public void hide() {
-        Gdx.app.log(TAG, "PlayScreen - hide");
+        Gdx.app.log(TAG, "hide()");
         dispose();
     }
 
@@ -302,7 +301,7 @@ public class PlayScreen implements Screen, InputProcessor {
 //        Gdx.app.log(TAG, "PlayScreen delta - " + delta);
 //        rocket.rotate(-delta * 2);
         rocket.setForceX(screenX - prevX);
-        prevX = screenX;//TODO fix rotation
+        prevX = screenX;
         return true;
     }
 

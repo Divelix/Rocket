@@ -15,11 +15,12 @@
   },
 
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
-    "default": { "font": "roboto-thin-font", "fontColor": "red" }
+    "default": { "font": "roboto-regular-font", "fontColor": "red" },
+    "smaller": { "font": "roboto-smaller-font", "fontColor": "red" }
   },
 
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
-    "default": { "down": "transparent", "up": "transparent", "font": "roboto-thin-font", "fontColor": "red" }
+    "default": { "down": "transparent", "up": "transparent", "font": "roboto-regular-font", "fontColor": "red" }
   },
 
   "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {

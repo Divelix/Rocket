@@ -20,13 +20,14 @@ public class Rocket extends Actor {
     private static final int ROCKET_HEIGHT = 80;
     private static final int START_HEIGHT = 110;
     private static final int DEFAULT_SPEED_LIMIT_X = 400;
-    private static final int DEFAULT_VELOCITY_Y = 20;
+    private static final int DEFAULT_SPEED_LIMIT_Y = 300;
+    private static final int DEFAULT_VELOCITY_Y = 10;
 //    private static final int VELOCITY = 250;
 //    private static final int MAX_ANGLE = 30;
 //    public static final int JUMP_HEIGHT = 450;
     private static float maxHeight = 0;
     private static int speedLimitX = DEFAULT_SPEED_LIMIT_X;
-    private static int speedLimitY = 300;
+    private static int speedLimitY = DEFAULT_SPEED_LIMIT_Y;
     public boolean isControlled;
     private Vector2 position;
     private Vector2 velocity;
@@ -100,10 +101,6 @@ public class Rocket extends Actor {
         if(position.x < 0 - this.getWidth())
             position.x = 0 - this.getWidth();
 
-//        if(Gdx.input.isTouched()) {
-//            velocity.y += 15;
-//        }
-
         //Speed limiting
         if(!isControlled) {
             if(speedLimitX > 0) {
@@ -129,9 +126,6 @@ public class Rocket extends Actor {
         this.setPosition(position.x, position.y);
         sprite.setPosition(getX(), getY());
         if(isControlled) {
-//            sprite.rotate(-forceX / 10);
-//            Gdx.app.log(TAG, "velocity.x = " + velocity.x);
-//            sprite.setRotation((position.x - touchX) / 4);
             sprite.setRotation(-velocity.x / 15);
         } else {
 //            sprite.setRotation(-velocity.x / 10);

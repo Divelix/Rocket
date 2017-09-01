@@ -23,13 +23,13 @@ public class Resource {
     public static TextureRegion landscape,
             originalRocket, alienRocket, despicableRocket, shuttleRocket, colibriRocket, lemonRocket, hawkRocket, eagleRocket, ravenRocket,
             cellBgWhite, cellBgYellow,
-            whitePixel,
+            whitePixel, popUp,
             star,
             backArrow, frontArrow,
             rocketLogo,
             cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9,
             missile;
-    public static BitmapFont font, robotoFont;
+    public static BitmapFont font, robotoFont, smallerFont;
 //    public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
     public static ArrayMap<String, TextureRegion> rockets = new ArrayMap<String, TextureRegion>();
     public static Sound starSound;
@@ -71,6 +71,7 @@ public class Resource {
         cellBgYellow = new TextureRegion(skinPack.findRegion("cellBgYellow"));
 
         whitePixel = new TextureRegion(skinPack.findRegion("whitePixel"));
+        popUp = new TextureRegion(skinPack.findRegion("popUp"));
 
         rocketLogo = new TextureRegion(skinPack.findRegion("rocketLogo"));
 
@@ -94,12 +95,19 @@ public class Resource {
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
         params.size = 24;
         font = generatorDef.generateFont(params);
-        params.size = 40;
+        params.size = 80;
         robotoFont = generatorRoboto.generateFont(params);
+        robotoFont.getData().setScale(0.5f);
+        params.size = 40;
+        smallerFont = generatorRoboto.generateFont(params);
+        smallerFont.getData().setScale(0.6f);
+
+
 
         skin = new Skin();
         skin.add("default-font", font, BitmapFont.class);
-        skin.add("roboto-thin-font", robotoFont, BitmapFont.class);
+        skin.add("roboto-regular-font", robotoFont, BitmapFont.class);
+        skin.add("roboto-smaller-font", smallerFont, BitmapFont.class);
         FileHandle fileHandle = Gdx.files.internal("skin.json");
         FileHandle atlasFile = fileHandle.sibling("skin.atlas");
         if (atlasFile.exists()) {
