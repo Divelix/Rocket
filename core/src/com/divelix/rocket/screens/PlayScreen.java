@@ -29,6 +29,8 @@ import com.divelix.rocket.actors.Cloud;
 import com.divelix.rocket.actors.Rocket;
 import com.divelix.rocket.actors.Star;
 
+import java.util.Locale;
+
 import static com.divelix.rocket.Resource.prefs;
 import static com.divelix.rocket.Resource.skin;
 
@@ -52,7 +54,7 @@ public class PlayScreen implements Screen, InputProcessor {
     private ImageButton pauseBtn;
     public static Container<Label> scoreWrapper;
     public static Label scoreLabel;
-    private Label scoreWordLabel, speedLabel, pauseLabel;
+    private Label speedLabel, pauseLabel;
     public static Rocket rocket;
     public static int score = 0;
     private float reducer = 1, dimmer = 1;
@@ -73,25 +75,25 @@ public class PlayScreen implements Screen, InputProcessor {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
-        scoreHeight = camera.position.y + 320;
+        scoreHeight = camera.position.y + 350;
         view = new FillViewport(Main.WIDTH, Main.HEIGHT, camera);
         stage = new Stage(view, batch);
 
         Image landscape = new Image(new TextureRegion(Resource.landscape));
+        float aspectRatio = landscape.getHeight() / landscape.getHeight();
+        landscape.setSize(Main.WIDTH, Main.WIDTH * aspectRatio);
         Label.LabelStyle labelStyle = new Label.LabelStyle(Resource.robotoFont, Color.YELLOW);
-        scoreWordLabel = new Label("Score:  ", labelStyle);
-        scoreWordLabel.setPosition(0, scoreHeight);
-        scoreLabel = new Label("" + score, labelStyle);
+        scoreLabel = new Label(String.format("%03d", score), labelStyle);
         scoreWrapper = new Container<Label>(scoreLabel);
         scoreWrapper.setTransform(true);
         scoreWrapper.setSize(scoreLabel.getWidth(), scoreLabel.getHeight());
         scoreWrapper.setOrigin(scoreWrapper.getWidth()/2, scoreWrapper.getHeight()/2);
-        scoreWrapper.setPosition(scoreWordLabel.getWidth(), scoreHeight);
+        scoreWrapper.setPosition(25, scoreHeight);
         speedLabel = new Label("Speed: ", labelStyle);
-        speedLabel.setPosition(0, scoreHeight - 40);
+        speedLabel.setPosition(25, scoreHeight - 40);
 
         pauseBtn = new ImageButton(skin, "pause");
-        pauseBtn.setBounds(Main.WIDTH - PAUSE_BTN_SIZE, scoreHeight, PAUSE_BTN_SIZE, PAUSE_BTN_SIZE);
+        pauseBtn.setBounds(Main.WIDTH - PAUSE_BTN_SIZE - 15, scoreHeight, PAUSE_BTN_SIZE, PAUSE_BTN_SIZE);
         pauseBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -146,11 +148,10 @@ public class PlayScreen implements Screen, InputProcessor {
         stage.addActor(star1);
         stage.addActor(star2);
         stage.addActor(star3);
-        stage.addActor(scoreWordLabel);
         stage.addActor(scoreWrapper);
         stage.addActor(speedLabel);
         stage.addActor(pauseBtn);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -181,7 +182,7 @@ public class PlayScreen implements Screen, InputProcessor {
         changeCameraPosition();
         camera.update();
 //        scoreLabel.setText("Score: " + score + " | " + rocket.getSpeedLimit() + " | " + rocket.getY());
-        scoreLabel.setText("" + score);
+        scoreLabel.setText(String.format("%03d", score));
         speedLabel.setText("Speed: " + rocket.getSpeedLimit()/10);
         if(rocket.getY() < camera.position.y - camera.viewportHeight/2 || rocket.getY() <= 100) {
             gameOver();
@@ -230,8 +231,7 @@ public class PlayScreen implements Screen, InputProcessor {
     private void changeCameraPosition() {
         if(rocket.getY() > 250) {
             camera.position.y = rocket.getMaxHeight() + 150;
-            scoreHeight = camera.position.y + 320;
-            scoreWordLabel.setY(scoreHeight);
+            scoreHeight = camera.position.y + 350;
             scoreWrapper.setY(scoreHeight);
             speedLabel.setY(scoreHeight - speedLabel.getHeight());
             pauseBtn.setY(scoreHeight);

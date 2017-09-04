@@ -2,18 +2,18 @@
 skin.png
 size: 2048,1024
 format: RGBA8888
-filter: Nearest,Nearest
+filter: Linear,Linear
 repeat: none
 adsBtnDown
   rotate: false
-  xy: 260, 5
+  xy: 518, 5
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 adsBtnUp
   rotate: false
-  xy: 1735, 727
+  xy: 260, 5
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -27,21 +27,21 @@ backArrow
   index: -1
 cellBgWhite
   rotate: false
-  xy: 1308, 483
+  xy: 1030, 483
   size: 276, 500
   orig: 276, 500
   offset: 0, 0
   index: -1
 cellBgYellow
   rotate: false
-  xy: 1030, 483
+  xy: 1308, 483
   size: 276, 500
   orig: 276, 500
   offset: 0, 0
   index: -1
 pause
   rotate: false
-  xy: 2, 5
+  xy: 1735, 727
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -62,21 +62,21 @@ playBtnUp
   index: -1
 popUp
   rotate: false
-  xy: 1320, 416
-  size: 121, 65
-  orig: 121, 65
+  xy: 1320, 320
+  size: 300, 161
+  orig: 300, 161
   offset: 0, 0
   index: -1
 rateBtnDown
   rotate: false
-  xy: 1062, 225
+  xy: 2, 5
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 rateBtnUp
   rotate: false
-  xy: 804, 213
+  xy: 1062, 225
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -90,14 +90,14 @@ rocketLogo
   index: -1
 shopBtnDown
   rotate: false
-  xy: 1735, 469
+  xy: 804, 213
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 shopBtnUp
   rotate: false
-  xy: 518, 5
+  xy: 1735, 469
   size: 256, 256
   orig: 256, 256
   offset: 0, 0

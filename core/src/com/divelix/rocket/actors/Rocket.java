@@ -1,6 +1,5 @@
 package com.divelix.rocket.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -75,8 +74,8 @@ public class Rocket extends Actor {
         }
     }
 
-    public void increaseSpeedLimitY() { speedLimitY += 20; }
-    public void decreaseSpeedLimitY() { speedLimitY -= velocity.y * 0.1f + 5; }
+    public void increaseSpeedLimitY() { speedLimitY += 10; }
+    public void decreaseSpeedLimitY() { speedLimitY -= velocity.y * 0.01f + 5; }
 
     public Rectangle getBounds() { return bounds; }
 

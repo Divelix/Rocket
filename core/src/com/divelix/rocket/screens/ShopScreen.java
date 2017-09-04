@@ -108,7 +108,7 @@ public class ShopScreen implements Screen {
         screenTable.add(scrollPane).colspan(3).padTop(25);//(scrollable) table with rockets
 
 //        table.debugAll();
-        screenTable.setDebug(true);//TODO delete
+//        screenTable.setDebug(true);
 
         dialog = new Dialog("", skin) {
             @Override

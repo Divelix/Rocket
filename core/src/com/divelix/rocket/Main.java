@@ -22,15 +22,15 @@ public class Main extends Game {
 	public void create () {
 		Gdx.app.log(TAG, "create()");
 		Resource.load();
-		prefs.putInteger("stars", 500);
-		prefs.putBoolean("Alien", false);
-		prefs.putBoolean("Despicable", false);
-		prefs.putBoolean("Shuttle", false);
-		prefs.putBoolean("Colibri", false);
-		prefs.putBoolean("Lemon", false);
-		prefs.putBoolean("Hawk", false);
-		prefs.putBoolean("Eagle", false);
-		prefs.putBoolean("Raven", false);
+//		prefs.putInteger("bestScore", 0);
+//		prefs.putBoolean("Alien", false);
+//		prefs.putBoolean("Despicable", false);
+//		prefs.putBoolean("Shuttle", false);
+//		prefs.putBoolean("Colibri", false);
+//		prefs.putBoolean("Lemon", false);
+//		prefs.putBoolean("Hawk", false);
+//		prefs.putBoolean("Eagle", false);
+//		prefs.putBoolean("Raven", false);
 		if(!prefs.getBoolean("Original"))
 			prefs.putBoolean("Original", true);
 		if(!prefs.getBoolean(prefs.getString("ActiveRocket")) || prefs.getString("ActiveRocket").equals(""))

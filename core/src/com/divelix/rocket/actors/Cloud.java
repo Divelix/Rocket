@@ -16,7 +16,6 @@ import com.divelix.rocket.screens.PlayScreen;
 /**
  * Created by Sergei Sergienko on 10.02.2017.
  */
-// аналог Enemy в старой версии
 public class Cloud extends Actor {
 
     private static final int cloudWidth = 150;
@@ -54,17 +53,15 @@ public class Cloud extends Actor {
         setBounds(position.x, position.y, sprite.getWidth(), sprite.getHeight());
         sprite.setPosition(getX(), getY());
         bounds.setPosition(getX(), getY());
-//        sprite.rotate(1);
         if(position.y < PlayScreen.camera.position.y - 400 - this.getHeight()) {
             position.y += PlayScreen.DISTANCE * 3;
             position.x = MathUtils.random(0, 480);
             changeSprite();
         }
         if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds)) {
-//            PlayScreen.rocket.decreaseSpeedLimitY();
+            PlayScreen.rocket.decreaseSpeedLimitY();
             Gdx.input.vibrate(100);
         }
-//            PlayScreen.gameOver();
         super.act(delta);
     }
 

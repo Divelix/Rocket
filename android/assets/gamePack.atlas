@@ -1,8 +1,8 @@
 
 gamePack.png
-size: 1024,512
+size: 2048,1024
 format: RGBA8888
-filter: Nearest,Nearest
+filter: Linear,Linear
 repeat: none
 cloud0
   rotate: false
@@ -20,56 +20,56 @@ cloud1
   index: -1
 cloud2
   rotate: false
-  xy: 586, 244
+  xy: 1408, 904
   size: 163, 73
   orig: 163, 73
   offset: 0, 0
   index: -1
 cloud3
   rotate: false
-  xy: 751, 297
+  xy: 412, 10
   size: 152, 71
   orig: 152, 71
   offset: 0, 0
   index: -1
 cloud4
   rotate: false
-  xy: 751, 230
+  xy: 718, 16
   size: 152, 65
   orig: 152, 65
   offset: 0, 0
   index: -1
 cloud5
   rotate: false
-  xy: 795, 446
+  xy: 1213, 915
   size: 193, 62
   orig: 193, 62
   offset: 0, 0
   index: -1
 cloud6
   rotate: false
-  xy: 484, 101
+  xy: 566, 11
   size: 150, 70
   orig: 150, 70
   offset: 0, 0
   index: -1
 cloud7
   rotate: false
-  xy: 586, 449
+  xy: 1004, 918
   size: 207, 59
   orig: 207, 59
   offset: 0, 0
   index: -1
 cloud8
   rotate: false
-  xy: 716, 370
+  xy: 1573, 903
   size: 163, 74
   orig: 163, 74
   offset: 0, 0
   index: -1
 cloud9
   rotate: false
-  xy: 484, 173
+  xy: 1738, 908
   size: 163, 69
   orig: 163, 69
   offset: 0, 0
@@ -77,20 +77,13 @@ cloud9
 landscape
   rotate: false
   xy: 2, 83
-  size: 480, 425
-  orig: 480, 425
-  offset: 0, 0
-  index: -1
-missile
-  rotate: false
-  xy: 484, 270
-  size: 100, 238
-  orig: 100, 238
+  size: 1000, 894
+  orig: 1000, 894
   offset: 0, 0
   index: -1
 star
   rotate: false
-  xy: 586, 319
+  xy: 1004, 788
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

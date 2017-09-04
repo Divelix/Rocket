@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,10 +28,8 @@ public class Resource {
             star,
             backArrow, frontArrow,
             rocketLogo,
-            cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9,
-            missile;
-    public static BitmapFont font, robotoFont, smallerFont;
-//    public static ArrayMap<TextureRegion, Integer> rockets = new ArrayMap<TextureRegion, Integer>();
+            cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9;
+    public static BitmapFont robotoFont, smallerFont;
     public static ArrayMap<String, TextureRegion> rockets = new ArrayMap<String, TextureRegion>();
     public static Sound starSound;
     public static Skin skin;
@@ -88,24 +87,20 @@ public class Resource {
         cloud8 = new TextureRegion(gamePack.findRegion("cloud8"));
         cloud9 = new TextureRegion(gamePack.findRegion("cloud9"));
 
-        missile = new TextureRegion(gamePack.findRegion("missile"));
+//        missile = new TextureRegion(gamePack.findRegion("missile"));
 
-        FreeTypeFontGenerator generatorDef = new FreeTypeFontGenerator(Gdx.files.internal("fonts/AGRevueCyrRoman.ttf"));
         FreeTypeFontGenerator generatorRoboto = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        params.size = 24;
-        font = generatorDef.generateFont(params);
         params.size = 80;
         robotoFont = generatorRoboto.generateFont(params);
         robotoFont.getData().setScale(0.5f);
+        robotoFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         params.size = 40;
         smallerFont = generatorRoboto.generateFont(params);
         smallerFont.getData().setScale(0.6f);
-
-
+        smallerFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         skin = new Skin();
-        skin.add("default-font", font, BitmapFont.class);
         skin.add("roboto-regular-font", robotoFont, BitmapFont.class);
         skin.add("roboto-smaller-font", smallerFont, BitmapFont.class);
         FileHandle fileHandle = Gdx.files.internal("skin.json");

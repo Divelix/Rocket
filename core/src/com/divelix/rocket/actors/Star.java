@@ -51,7 +51,7 @@ public class Star extends Actor {
             PlayScreen.scoreWrapper.addAction(Actions.sequence(Actions.scaleBy(0.5f, 0.5f, 0.05f), Actions.scaleBy(-0.5f, -0.5f, 0.05f)));
             Resource.starSound.play(1.0f);
             PlayScreen.score++;
-//            PlayScreen.rocket.increaseSpeedLimitY();
+            PlayScreen.rocket.increaseSpeedLimitY();
         }
         if(position.y < PlayScreen.camera.position.y - PlayScreen.camera.viewportHeight/2) {
             position.y += PlayScreen.DISTANCE * 3;

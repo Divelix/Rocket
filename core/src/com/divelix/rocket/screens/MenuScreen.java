@@ -176,7 +176,7 @@ public class MenuScreen implements Screen {
 
         stage = new Stage(view);
         stage.addActor(table);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
         Gdx.input.setInputProcessor(stage);
     }
