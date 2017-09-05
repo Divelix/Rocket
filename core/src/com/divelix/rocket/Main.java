@@ -7,6 +7,7 @@ import com.divelix.rocket.screens.MenuScreen;
 import static com.divelix.rocket.Resource.prefs;
 
 public class Main extends Game {
+	public static final float VERSION = 1.0f;
 	public static final String TITLE = "Rocket";
 	private static final String TAG = "Main";
 	public static final int WIDTH = 480;

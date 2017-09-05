@@ -47,7 +47,7 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
 	private void loadAd() {
 		Gdx.app.log(TAG, "Started video loading...");
 		if(!video.isLoaded()) {
-			video.loadAd("ca-app-pub-5394106527360395/5515076751", new AdRequest.Builder().build());
+			video.loadAd("ca-app-pub-3940256099942544/5224354917", new AdRequest.Builder().build());
 		}
 	}
 

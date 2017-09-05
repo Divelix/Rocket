@@ -81,9 +81,16 @@ landscape
   orig: 1000, 894
   offset: 0, 0
   index: -1
-star
+speedometer
   rotate: false
   xy: 1004, 788
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+star
+  rotate: false
+  xy: 1004, 658
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

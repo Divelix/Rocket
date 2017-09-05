@@ -25,7 +25,7 @@ public class Resource {
             originalRocket, alienRocket, despicableRocket, shuttleRocket, colibriRocket, lemonRocket, hawkRocket, eagleRocket, ravenRocket,
             cellBgWhite, cellBgYellow,
             whitePixel, popUp,
-            star,
+            star, speedometer,
             backArrow, frontArrow,
             rocketLogo,
             cloud0, cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9;
@@ -75,6 +75,7 @@ public class Resource {
         rocketLogo = new TextureRegion(skinPack.findRegion("rocketLogo"));
 
         star = new TextureRegion(gamePack.findRegion("star"));
+        speedometer = new TextureRegion(gamePack.findRegion("speedometer"));
 
         cloud0 = new TextureRegion(gamePack.findRegion("cloud0"));
         cloud1 = new TextureRegion(gamePack.findRegion("cloud1"));

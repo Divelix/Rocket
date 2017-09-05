@@ -55,6 +55,7 @@ public class PlayScreen implements Screen, InputProcessor {
     public static Container<Label> scoreWrapper;
     public static Label scoreLabel;
     private Label speedLabel, pauseLabel;
+    private Image star, speedometer;
     public static Rocket rocket;
     public static int score = 0;
     private float reducer = 1, dimmer = 1;
@@ -79,18 +80,26 @@ public class PlayScreen implements Screen, InputProcessor {
         view = new FillViewport(Main.WIDTH, Main.HEIGHT, camera);
         stage = new Stage(view, batch);
 
+        rocket = new Rocket();
+
         Image landscape = new Image(new TextureRegion(Resource.landscape));
         float aspectRatio = landscape.getHeight() / landscape.getHeight();
         landscape.setSize(Main.WIDTH, Main.WIDTH * aspectRatio);
         Label.LabelStyle labelStyle = new Label.LabelStyle(Resource.robotoFont, Color.YELLOW);
+        star = new Image(Resource.star);
+        star.setSize(50, 50);
+        star.setPosition(25, scoreHeight);
         scoreLabel = new Label(String.format("%03d", score), labelStyle);
         scoreWrapper = new Container<Label>(scoreLabel);
         scoreWrapper.setTransform(true);
         scoreWrapper.setSize(scoreLabel.getWidth(), scoreLabel.getHeight());
         scoreWrapper.setOrigin(scoreWrapper.getWidth()/2, scoreWrapper.getHeight()/2);
-        scoreWrapper.setPosition(25, scoreHeight);
-        speedLabel = new Label("Speed: ", labelStyle);
-        speedLabel.setPosition(25, scoreHeight - 40);
+        scoreWrapper.setPosition(star.getX() + star.getWidth(), scoreHeight);
+        speedometer = new Image(Resource.speedometer);
+        speedometer.setSize(50, 50);
+        speedometer.setPosition(25, scoreHeight - 50);
+        speedLabel = new Label(String.format("%03d", rocket.getSpeedLimit()/10), labelStyle);
+        speedLabel.setPosition(speedometer.getX() + speedometer.getWidth(), scoreHeight - 50);
 
         pauseBtn = new ImageButton(skin, "pause");
         pauseBtn.setBounds(Main.WIDTH - PAUSE_BTN_SIZE - 15, scoreHeight, PAUSE_BTN_SIZE, PAUSE_BTN_SIZE);
@@ -125,14 +134,6 @@ public class PlayScreen implements Screen, InputProcessor {
         dialog.setResizable(true);
         dialog.setVisible(true);
 
-//        backWindow = new Window("Ma first window", Resource.skin);
-//        backWindow.setSize(300, 100);
-//        backWindow.setPosition(Main.WIDTH/2-backWindow.getWidth()/2, camera.position.y - backWindow.getHeight()/2);
-//        backWindow.setMovable(true);
-//        backWindow.setModal(true);
-//        backWindow.setVisible(false);
-
-        rocket = new Rocket();
         Cloud cloud1 = new Cloud(DISTANCE);
         Cloud cloud2 = new Cloud(DISTANCE * 2);
         Cloud cloud3 = new Cloud(DISTANCE * 3);
@@ -148,7 +149,9 @@ public class PlayScreen implements Screen, InputProcessor {
         stage.addActor(star1);
         stage.addActor(star2);
         stage.addActor(star3);
+        stage.addActor(star);
         stage.addActor(scoreWrapper);
+        stage.addActor(speedometer);
         stage.addActor(speedLabel);
         stage.addActor(pauseBtn);
 //        stage.setDebugAll(true);
@@ -183,7 +186,7 @@ public class PlayScreen implements Screen, InputProcessor {
         camera.update();
 //        scoreLabel.setText("Score: " + score + " | " + rocket.getSpeedLimit() + " | " + rocket.getY());
         scoreLabel.setText(String.format("%03d", score));
-        speedLabel.setText("Speed: " + rocket.getSpeedLimit()/10);
+        speedLabel.setText(String.format("%03d", rocket.getSpeedLimit()/10));
         if(rocket.getY() < camera.position.y - camera.viewportHeight/2 || rocket.getY() <= 100) {
             gameOver();
         }
@@ -232,8 +235,10 @@ public class PlayScreen implements Screen, InputProcessor {
         if(rocket.getY() > 250) {
             camera.position.y = rocket.getMaxHeight() + 150;
             scoreHeight = camera.position.y + 350;
+            star.setY(scoreHeight);
             scoreWrapper.setY(scoreHeight);
-            speedLabel.setY(scoreHeight - speedLabel.getHeight());
+            speedometer.setY(scoreHeight - 50);
+            speedLabel.setY(scoreHeight - 50);
             pauseBtn.setY(scoreHeight);
         }
     }
