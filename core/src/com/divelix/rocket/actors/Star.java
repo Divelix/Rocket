@@ -47,11 +47,7 @@ public class Star extends Actor {
         sprite.rotate(DEGREES);
         if(Intersector.overlaps(PlayScreen.rocket.getBounds(), bounds)) {
             position.y += PlayScreen.DISTANCE * 3;
-            PlayScreen.scoreLabel.addAction(Actions.sequence(Actions.color(Color.ORANGE, 0.05f), Actions.color(Color.YELLOW, 0.05f)));
-            PlayScreen.scoreWrapper.addAction(Actions.sequence(Actions.scaleBy(0.5f, 0.5f, 0.05f), Actions.scaleBy(-0.5f, -0.5f, 0.05f)));
-            Resource.starSound.play(1.0f);
-            PlayScreen.score++;
-            PlayScreen.rocket.increaseSpeedLimitY();
+            PlayScreen.isStarTaken = true;
         }
         if(position.y < PlayScreen.camera.position.y - PlayScreen.camera.viewportHeight/2) {
             position.y += PlayScreen.DISTANCE * 3;

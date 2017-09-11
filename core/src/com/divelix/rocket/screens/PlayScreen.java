@@ -12,8 +12,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -51,17 +53,14 @@ public class PlayScreen implements Screen, InputProcessor {
     private SpriteBatch batch;
     private Viewport view;
     private Stage stage;
-    private ImageButton pauseBtn;
-    public static Container<Label> scoreWrapper;
-    public static Label scoreLabel;
-    private Label speedLabel, pauseLabel;
-    private Image star, speedometer;
+    private Label pauseLabel;
     public static Rocket rocket;
     public static int score = 0;
     private float reducer = 1, dimmer = 1;
     private float scoreHeight;
     private boolean pause = false;
     private Dialog dialog;
+    public static boolean isStarTaken;
 
 
     public PlayScreen(final Game game, AdHandler handler) {
@@ -85,30 +84,8 @@ public class PlayScreen implements Screen, InputProcessor {
         Image landscape = new Image(new TextureRegion(Resource.landscape));
         float aspectRatio = landscape.getHeight() / landscape.getHeight();
         landscape.setSize(Main.WIDTH, Main.WIDTH * aspectRatio);
-        Label.LabelStyle labelStyle = new Label.LabelStyle(Resource.robotoFont, Color.YELLOW);
-        star = new Image(Resource.star);
-        star.setSize(50, 50);
-        star.setPosition(25, scoreHeight);
-        scoreLabel = new Label(String.format("%03d", score), labelStyle);
-        scoreWrapper = new Container<Label>(scoreLabel);
-        scoreWrapper.setTransform(true);
-        scoreWrapper.setSize(scoreLabel.getWidth(), scoreLabel.getHeight());
-        scoreWrapper.setOrigin(scoreWrapper.getWidth()/2, scoreWrapper.getHeight()/2);
-        scoreWrapper.setPosition(star.getX() + star.getWidth(), scoreHeight);
-        speedometer = new Image(Resource.speedometer);
-        speedometer.setSize(50, 50);
-        speedometer.setPosition(25, scoreHeight - 50);
-        speedLabel = new Label(String.format("%03d", rocket.getSpeedLimit()/10), labelStyle);
-        speedLabel.setPosition(speedometer.getX() + speedometer.getWidth(), scoreHeight - 50);
 
-        pauseBtn = new ImageButton(skin, "pause");
-        pauseBtn.setBounds(Main.WIDTH - PAUSE_BTN_SIZE - 15, scoreHeight, PAUSE_BTN_SIZE, PAUSE_BTN_SIZE);
-        pauseBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                pause();
-            }
-        });
+        HUD HUD = new HUD();
 
         dialog = new Dialog("", skin) {
             @Override
@@ -126,7 +103,6 @@ public class PlayScreen implements Screen, InputProcessor {
         dialog.button("     No", false);
         dialog.key(Input.Keys.ENTER, true);
         dialog.key(Input.Keys.ESCAPE, false);
-
         dialog.pad(20, 20, 20, 20);
         dialog.getButtonTable().padTop(30);
         dialog.setModal(true);
@@ -149,11 +125,7 @@ public class PlayScreen implements Screen, InputProcessor {
         stage.addActor(star1);
         stage.addActor(star2);
         stage.addActor(star3);
-        stage.addActor(star);
-        stage.addActor(scoreWrapper);
-        stage.addActor(speedometer);
-        stage.addActor(speedLabel);
-        stage.addActor(pauseBtn);
+        stage.addActor(HUD);
 //        stage.setDebugAll(true);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -171,7 +143,6 @@ public class PlayScreen implements Screen, InputProcessor {
         changeBgColor();
 
         if(!pause) stage.act(delta);
-//        stage.getViewport().apply();
         view.apply();
         stage.draw();
 
@@ -184,9 +155,6 @@ public class PlayScreen implements Screen, InputProcessor {
 
         changeCameraPosition();
         camera.update();
-//        scoreLabel.setText("Score: " + score + " | " + rocket.getSpeedLimit() + " | " + rocket.getY());
-        scoreLabel.setText(String.format("%03d", score));
-        speedLabel.setText(String.format("%03d", rocket.getSpeedLimit()/10));
         if(rocket.getY() < camera.position.y - camera.viewportHeight/2 || rocket.getY() <= 100) {
             gameOver();
         }
@@ -235,11 +203,6 @@ public class PlayScreen implements Screen, InputProcessor {
         if(rocket.getY() > 250) {
             camera.position.y = rocket.getMaxHeight() + 150;
             scoreHeight = camera.position.y + 350;
-            star.setY(scoreHeight);
-            scoreWrapper.setY(scoreHeight);
-            speedometer.setY(scoreHeight - 50);
-            speedLabel.setY(scoreHeight - 50);
-            pauseBtn.setY(scoreHeight);
         }
     }
 
@@ -319,4 +282,71 @@ public class PlayScreen implements Screen, InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
+    //---------------------------------------HUD-----------------------------------
+    private class HUD extends Group {
+
+        public Image star, speedometer;
+        public Label scoreLabel, speedLabel;
+        public Container<Label> scoreWrapper;
+        public ImageButton pauseBtn;
+
+        public HUD() {
+            Label.LabelStyle labelStyle = new Label.LabelStyle(Resource.robotoFont, Color.YELLOW);
+            star = new Image(Resource.star);
+            star.setSize(50, 50);
+            star.setPosition(25, scoreHeight);
+            scoreLabel = new Label(String.format("%03d", score), labelStyle);
+            scoreWrapper = new Container<Label>(scoreLabel);
+            scoreWrapper.setTransform(true);
+            scoreWrapper.setSize(scoreLabel.getWidth(), scoreLabel.getHeight());
+            scoreWrapper.setOrigin(scoreWrapper.getWidth()/2, scoreWrapper.getHeight()/2);
+            scoreWrapper.setPosition(star.getX() + star.getWidth(), scoreHeight);
+            speedometer = new Image(Resource.speedometer);
+            speedometer.setSize(50, 50);
+            speedometer.setPosition(25, scoreHeight - 50);
+            speedLabel = new Label(String.format("%03d", rocket.getSpeedLimit()/10), labelStyle);
+            speedLabel.setPosition(speedometer.getX() + speedometer.getWidth(), scoreHeight - 50);
+
+            pauseBtn = new ImageButton(skin, "pause");
+            pauseBtn.setBounds(Main.WIDTH - PAUSE_BTN_SIZE - 15, scoreHeight, PAUSE_BTN_SIZE, PAUSE_BTN_SIZE);
+            pauseBtn.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    pause();
+                }
+            });
+
+            this.addActor(star);
+            this.addActor(scoreWrapper);
+            this.addActor(speedometer);
+            this.addActor(speedLabel);
+            this.addActor(pauseBtn);
+        }
+
+        @Override
+        public void act(float delta) {
+            super.act(delta);
+            if(isStarTaken) {
+                score++;
+                scoreLabel.setText(String.format("%03d", score));
+                scoreLabel.addAction(Actions.sequence(Actions.color(Color.ORANGE, 0.05f), Actions.color(Color.YELLOW, 0.05f)));
+                scoreWrapper.addAction(Actions.sequence(Actions.scaleBy(0.5f, 0.5f, 0.05f), Actions.scaleBy(-0.5f, -0.5f, 0.05f)));
+                Resource.starSound.play(1.0f);
+                rocket.increaseSpeedLimitY();
+                isStarTaken = !isStarTaken;
+            }
+            speedLabel.setText(String.format("%03d", rocket.getSpeedLimit()/10));
+            raiseHUD();
+        }
+
+        public void raiseHUD() {
+            star.setY(scoreHeight);
+            scoreWrapper.setY(scoreHeight);
+            speedometer.setY(scoreHeight - 50);
+            speedLabel.setY(scoreHeight - 50);
+            pauseBtn.setY(scoreHeight);
+        }
+    }
 }
+
