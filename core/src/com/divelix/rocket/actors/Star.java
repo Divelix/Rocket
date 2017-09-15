@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.divelix.rocket.Resource;
+import com.divelix.rocket.managers.Assets;
 import com.divelix.rocket.screens.PlayScreen;
 
 /**
@@ -26,7 +26,7 @@ public class Star extends Actor {
     public Star(float x, float y) {
         position = new Vector2(x - SIZE/2, y - SIZE/2);
         setBounds(position.x, position.y, SIZE, SIZE);
-        sprite = new Sprite(Resource.star);
+        sprite = new Sprite(Assets.gamePack.findRegion("star"));
         sprite.setOrigin(SIZE/2, SIZE/2);
         sprite.setBounds(getX(), getY(), getWidth(), getHeight());
         bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());

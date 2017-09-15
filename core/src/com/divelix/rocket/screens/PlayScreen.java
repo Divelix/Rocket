@@ -26,15 +26,15 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.AdHandler;
 import com.divelix.rocket.Main;
-import com.divelix.rocket.Resource;
 import com.divelix.rocket.actors.Cloud;
 import com.divelix.rocket.actors.Rocket;
 import com.divelix.rocket.actors.Star;
+import com.divelix.rocket.managers.Assets;
 
 import java.util.Locale;
 
-import static com.divelix.rocket.Resource.prefs;
-import static com.divelix.rocket.Resource.skin;
+import static com.divelix.rocket.managers.Assets.prefs;
+import static com.divelix.rocket.managers.Assets.skin;
 
 /**
  * Created by Sergei Sergienko on 05.02.2017.
@@ -55,7 +55,7 @@ public class PlayScreen implements Screen, InputProcessor {
     private Stage stage;
     private Label pauseLabel;
     public static Rocket rocket;
-    public static int score = 0;
+    private static int score = 0;
     private float reducer = 1, dimmer = 1;
     private float scoreHeight;
     private boolean pause = false;
@@ -81,7 +81,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
         rocket = new Rocket();
 
-        Image landscape = new Image(new TextureRegion(Resource.landscape));
+        Image landscape = new Image(new TextureRegion(Assets.gamePack.findRegion("landscape")));
         float aspectRatio = landscape.getHeight() / landscape.getHeight();
         landscape.setSize(Main.WIDTH, Main.WIDTH * aspectRatio);
 
@@ -172,7 +172,7 @@ public class PlayScreen implements Screen, InputProcessor {
         Gdx.app.log(TAG, "pause()");
         if(!pause) {
             pause = true;
-            pauseLabel = new Label("PAUSE", new Label.LabelStyle(Resource.robotoFont, Color.WHITE));
+            pauseLabel = new Label("PAUSE", skin, "whiteBigFont");
             pauseLabel.setPosition(Main.WIDTH / 2 - pauseLabel.getWidth() / 2, camera.position.y + Main.HEIGHT / 5);
             stage.addActor(pauseLabel);
         } else {
@@ -194,7 +194,7 @@ public class PlayScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-        Gdx.app.log("PlayScreen", "PlayScreen - dispose");
+        Gdx.app.log(TAG, "dispose()");
         stage.dispose();
         batch.dispose();
     }
@@ -286,26 +286,25 @@ public class PlayScreen implements Screen, InputProcessor {
     //---------------------------------------HUD-----------------------------------
     private class HUD extends Group {
 
-        public Image star, speedometer;
-        public Label scoreLabel, speedLabel;
-        public Container<Label> scoreWrapper;
-        public ImageButton pauseBtn;
+        private Image star, speedometer;
+        private Label scoreLabel, speedLabel;
+        private Container<Label> scoreWrapper;
+        private ImageButton pauseBtn;
 
-        public HUD() {
-            Label.LabelStyle labelStyle = new Label.LabelStyle(Resource.robotoFont, Color.YELLOW);
-            star = new Image(Resource.star);
+        private HUD() {
+            star = new Image(Assets.gamePack.findRegion("star"));
             star.setSize(50, 50);
             star.setPosition(25, scoreHeight);
-            scoreLabel = new Label(String.format("%03d", score), labelStyle);
+            scoreLabel = new Label(String.format(Locale.ENGLISH, "%03d", score), skin, "yellowBigFont");
             scoreWrapper = new Container<Label>(scoreLabel);
             scoreWrapper.setTransform(true);
             scoreWrapper.setSize(scoreLabel.getWidth(), scoreLabel.getHeight());
             scoreWrapper.setOrigin(scoreWrapper.getWidth()/2, scoreWrapper.getHeight()/2);
             scoreWrapper.setPosition(star.getX() + star.getWidth(), scoreHeight);
-            speedometer = new Image(Resource.speedometer);
+            speedometer = new Image(Assets.gamePack.findRegion("speedometer"));
             speedometer.setSize(50, 50);
             speedometer.setPosition(25, scoreHeight - 50);
-            speedLabel = new Label(String.format("%03d", rocket.getSpeedLimit()/10), labelStyle);
+            speedLabel = new Label(String.format(Locale.ENGLISH, "%03d", rocket.getSpeedLimit()/10), skin, "yellowBigFont");
             speedLabel.setPosition(speedometer.getX() + speedometer.getWidth(), scoreHeight - 50);
 
             pauseBtn = new ImageButton(skin, "pause");
@@ -329,18 +328,18 @@ public class PlayScreen implements Screen, InputProcessor {
             super.act(delta);
             if(isStarTaken) {
                 score++;
-                scoreLabel.setText(String.format("%03d", score));
+                scoreLabel.setText(String.format(Locale.ENGLISH, "%03d", score));
                 scoreLabel.addAction(Actions.sequence(Actions.color(Color.ORANGE, 0.05f), Actions.color(Color.YELLOW, 0.05f)));
                 scoreWrapper.addAction(Actions.sequence(Actions.scaleBy(0.5f, 0.5f, 0.05f), Actions.scaleBy(-0.5f, -0.5f, 0.05f)));
-                Resource.starSound.play(1.0f);
+                Assets.starSound.play(1.0f);
                 rocket.increaseSpeedLimitY();
                 isStarTaken = !isStarTaken;
             }
-            speedLabel.setText(String.format("%03d", rocket.getSpeedLimit()/10));
+            speedLabel.setText(String.format(Locale.ENGLISH, "%03d", rocket.getSpeedLimit()/10));
             raiseHUD();
         }
 
-        public void raiseHUD() {
+        private void raiseHUD() {
             star.setY(scoreHeight);
             scoreWrapper.setY(scoreHeight);
             speedometer.setY(scoreHeight - 50);

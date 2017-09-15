@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,10 +22,10 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.AdHandler;
 import com.divelix.rocket.Main;
-import com.divelix.rocket.Resource;
+import com.divelix.rocket.managers.Assets;
 
-import static com.divelix.rocket.Resource.prefs;
-import static com.divelix.rocket.Resource.skin;
+import static com.divelix.rocket.managers.Assets.prefs;
+import static com.divelix.rocket.managers.Assets.skin;
 
 /**
  * Created by Sergei Sergienko on 05.02.2017.
@@ -84,9 +85,10 @@ public class MenuScreen implements Screen {
 
         view = new FillViewport(Main.WIDTH, Main.HEIGHT);
 
-        Label bestScoreLabel = new Label("Best Score: " + bestScore, new Label.LabelStyle(Resource.robotoFont, Color.RED));
+        Label bestScoreLabel = new Label("Best Score: " + bestScore, skin);
 
-        Image logo = new Image(Resource.rocketLogo);
+//        Image logo = new Image(Resource.rocketLogo);
+        Image logo = new Image(Assets.skinPack.findRegion("rocketLogo"));
         float aspectRatio = logo.getHeight() / logo.getWidth();
 //        logo.setSize(LOGO_WIDTH, LOGO_WIDTH * aspectRatio);
 
@@ -98,9 +100,9 @@ public class MenuScreen implements Screen {
             }
         });
 
-        Image star = new Image(Resource.star);
+        Image star = new Image(Assets.gamePack.findRegion("star"));
         star.setBounds(Main.WIDTH/2-STAR_SIZE/2, STAR_Y, STAR_SIZE, STAR_SIZE);
-        starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoFont, Color.YELLOW));
+        starsCountLabel = new Label(String.valueOf(starsCount), skin, "yellowBigFont");
         starsCountLabel.setPosition(Main.WIDTH/2-starsCountLabel.getWidth()/2, star.getY()-starsCountLabel.getHeight());
 
 
@@ -269,11 +271,11 @@ public class MenuScreen implements Screen {
         private PopUp(int x, int y) {
             this.setSize(115, 65);
             this.setPosition(x - 57, y);
-            bgBalloon = new Image(Resource.popUp);
+            bgBalloon = new Image(Assets.skinPack.findRegion("popUp"));
             bgBalloon.setSize(this.getWidth(), this.getHeight());
-            text = new Label("Get 50", new Label.LabelStyle(Resource.smallerFont, Color.YELLOW));
+            text = new Label("Get 50", skin, "yellowSmallFont");
             text.setPosition(bgBalloon.getX() + 10, bgBalloon.getY() + 24);
-            star = new Image(Resource.star);
+            star = new Image(Assets.gamePack.findRegion("star"));
             star.setScale(0.2f);
             star.setPosition(text.getX() + text.getWidth() + 3, text.getY() + 3);
 

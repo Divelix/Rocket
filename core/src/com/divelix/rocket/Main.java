@@ -2,9 +2,10 @@ package com.divelix.rocket;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.divelix.rocket.managers.Assets;
 import com.divelix.rocket.screens.MenuScreen;
 
-import static com.divelix.rocket.Resource.prefs;
+import static com.divelix.rocket.managers.Assets.prefs;
 
 public class Main extends Game {
 	public static final String TITLE = "Rocket";
@@ -21,7 +22,7 @@ public class Main extends Game {
 	@Override
 	public void create () {
 		Gdx.app.log(TAG, "create()");
-		Resource.load();
+		Assets.load();
 //		prefs.putInteger("bestScore", 0);
 //		prefs.putBoolean("Alien", false);
 //		prefs.putBoolean("Despicable", false);
@@ -41,11 +42,13 @@ public class Main extends Game {
 
 	@Override
 	public void pause() {
+		Gdx.app.log(TAG, "pause()");
 		super.pause();
 	}
 
 	@Override
 	public void resume() {
+		Gdx.app.log(TAG, "resume()");
 		super.resume();
 	}
 
@@ -56,12 +59,14 @@ public class Main extends Game {
 
 	@Override
 	public void resize(int width, int height) {
+		Gdx.app.log(TAG, "resize()");
 		super.resize(width, height);
 	}
 	
 	@Override
 	public void dispose () {
-		Resource.dispose();
+		Gdx.app.log(TAG, "dispose()");
+		Assets.dispose();
 		super.dispose();
 	}
 }

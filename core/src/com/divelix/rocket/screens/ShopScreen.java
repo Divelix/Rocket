@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,12 +22,12 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.divelix.rocket.AdHandler;
 import com.divelix.rocket.Main;
-import com.divelix.rocket.Resource;
+import com.divelix.rocket.managers.Assets;
 
 import java.util.ArrayList;
 
-import static com.divelix.rocket.Resource.prefs;
-import static com.divelix.rocket.Resource.skin;
+import static com.divelix.rocket.managers.Assets.prefs;
+import static com.divelix.rocket.managers.Assets.skin;
 
 /**
  * Created by Sergei Sergienko on 14.02.2017.
@@ -71,18 +72,18 @@ public class ShopScreen implements Screen {
         activeRocket = prefs.getString("ActiveRocket");
         //Top nav elements
         BackButton backBtn = new BackButton();
-        Label shopText = new Label("SHOP", new Label.LabelStyle(Resource.robotoFont, Color.WHITE));
+        Label shopText = new Label("SHOP", skin, "whiteBigFont");
         PlayButton playBtn = new PlayButton();
         //Star image and count
-        Image starImg = new Image(Resource.star);
-        starsCountLabel = new Label(String.valueOf(starsCount), new Label.LabelStyle(Resource.robotoFont, Color.YELLOW));
+        Image starImg = new Image(Assets.gamePack.findRegion("star"));
+        starsCountLabel = new Label(String.valueOf(starsCount), skin, "yellowBigFont");
         //Shop as a scrollable table
         Table rocketTable = new Table();
 
         //SHOP TABLE
         shopCells = new ArrayList<ShopCell>();
-        for (int i = 1; i <= Resource.rockets.size; i++) {
-            shopCells.add(new ShopCell(Resource.rockets.getKeyAt(i-1), i*100));
+        for (int i = 1; i <= Assets.rockets.size; i++) {
+            shopCells.add(new ShopCell(Assets.rockets.getKeyAt(i-1), i*100));
             rocketTable.add(shopCells.get(i-1)).width(100).pad(15);
             if(i % 3 == 0) rocketTable.row();
         }
@@ -181,11 +182,11 @@ public class ShopScreen implements Screen {
 
     private class BackButton extends Group {
         private BackButton() {
-            Image arrow = new Image(Resource.backArrow);
+            Image arrow = new Image(Assets.skinPack.findRegion("backArrow"));
             float aspectRatio = arrow.getWidth()/arrow.getHeight();
             int arrowHeight = 50;
             arrow.setSize(arrowHeight*aspectRatio, arrowHeight);
-            Label text = new Label("BACK", new Label.LabelStyle(Resource.robotoFont, Color.WHITE));
+            Label text = new Label("BACK", skin, "whiteBigFont");
             text.setX(arrow.getX() + arrow.getWidth());
             setSize(text.getWidth()+arrow.getWidth(), arrowHeight);
             this.addActor(arrow);
@@ -201,11 +202,11 @@ public class ShopScreen implements Screen {
 
     private class PlayButton extends Group {
         private PlayButton() {
-            Image arrow = new Image(Resource.frontArrow);
+            Image arrow = new Image( Assets.skinPack.findRegion("frontArrow"));
             float aspectRatio = arrow.getWidth()/arrow.getHeight();
             int arrowHeight = 50;
             arrow.setSize(arrowHeight*aspectRatio, arrowHeight);
-            Label text = new Label("PLAY", new Label.LabelStyle(Resource.robotoFont, Color.WHITE));
+            Label text = new Label("PLAY", skin, "whiteBigFont");
             text.setX(getX());
             arrow.setX(getX() + text.getWidth());
             setSize(text.getWidth()+arrow.getWidth(), arrowHeight);
@@ -230,18 +231,18 @@ public class ShopScreen implements Screen {
         private ShopCell(final String rocketName, final int price) {
             TITLE = rocketName;
             this.setSize(WIDTH, HEIGHT);
-            cellBg = new Image(Resource.cellBgWhite);
+            cellBg = new Image(Assets.skinPack.findRegion("cellBgWhite"));
             if(rocketName.equals(activeRocket))
-                cellBg.setDrawable(new TextureRegionDrawable(Resource.cellBgYellow));
+                cellBg.setDrawable(new TextureRegionDrawable(Assets.skinPack.findRegion("cellBgWhite")));
             cellBg.setSize(WIDTH, HEIGHT);
-            Image rocket = new Image(Resource.rockets.get(rocketName));
-            final Image shadow = new Image(Resource.rockets.get(rocketName));
+            Image rocket = new Image(Assets.rockets.get(rocketName));
+            final Image shadow = new Image(Assets.rockets.get(rocketName));
             shadow.setColor(Color.BLACK);
             float aspectRatio = rocket.getWidth()/rocket.getHeight();
             rocket.setBounds(cellBg.getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), cellBg.getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
             shadow.setBounds(cellBg.getX() + WIDTH/2-(HEIGHT*0.3f*aspectRatio), cellBg.getY() + HEIGHT/3, HEIGHT*0.6f*aspectRatio, HEIGHT*0.6f);
             shadow.setOrigin(shadow.getWidth()/2, shadow.getHeight()/2);
-            label = new Label(String.valueOf(price), new Label.LabelStyle(Resource.robotoFont, Color.YELLOW));
+            label = new Label(String.valueOf(price), skin, "yellowBigFont");
             label.setPosition(cellBg.getX() + WIDTH/2 - label.getWidth()/2, cellBg.getY() + HEIGHT/15);
             this.addActor(cellBg);
             this.addActor(rocket);
@@ -275,7 +276,7 @@ public class ShopScreen implements Screen {
                     }
                     for(ShopCell cell : shopCells)
                         if(!cell.getTitle().equals(activeRocket))
-                            cell.cellBg.setDrawable(new TextureRegionDrawable(Resource.cellBgWhite));
+                            cell.cellBg.setDrawable(new TextureRegionDrawable(Assets.skinPack.findRegion("cellBgWhite")));
                 }
             });
         }
@@ -286,7 +287,7 @@ public class ShopScreen implements Screen {
             prefs.putString("ActiveRocket", rocketName);
             prefs.flush();
             Gdx.app.log(TAG, "ActiveRocket = " + rocketName);
-            cellBg.setDrawable(new TextureRegionDrawable(Resource.cellBgYellow));
+            cellBg.setDrawable(new TextureRegionDrawable(Assets.skinPack.findRegion("cellBgYellow")));
         }
     }
 }

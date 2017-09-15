@@ -16,6 +16,9 @@
 
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "default": { "font": "roboto-regular-font", "fontColor": "red" },
+    "yellowBigFont": { "font": "roboto-regular-font", "fontColor": "yellow" },
+    "whiteBigFont": { "font": "roboto-regular-font", "fontColor": "white" },
+    "yellowSmallFont": { "font": "roboto-smaller-font", "fontColor": "yellow" },
     "smaller": { "font": "roboto-smaller-font", "fontColor": "red" }
   },
 

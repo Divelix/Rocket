@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.divelix.rocket.Main;
-import com.divelix.rocket.Resource;
+import com.divelix.rocket.managers.Assets;
 
 import static com.divelix.rocket.Resource.prefs;
 
@@ -39,7 +39,7 @@ public class Rocket extends Actor {
         position = new Vector2(0, 0);
         velocity = new Vector2(0, 0);
         forceX = 0;
-        sprite = new Sprite(Resource.rockets.get(prefs.getString("ActiveRocket")));
+        sprite = new Sprite(Assets.rockets.get(prefs.getString("ActiveRocket")));
 //        sprite.setColor(Color.BLACK);
         float aspectRatio = sprite.getWidth()/sprite.getHeight();
         setBounds(position.x, position.y, ROCKET_HEIGHT * aspectRatio, ROCKET_HEIGHT);

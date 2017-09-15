@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.divelix.rocket.Main;
-import com.divelix.rocket.Resource;
+import com.divelix.rocket.managers.Assets;
 import com.divelix.rocket.screens.PlayScreen;
 
 /**
@@ -68,17 +68,17 @@ public class Cloud extends Actor {
     private TextureRegion pickSprite(int i) {
         TextureRegion textureRegion;
         switch (i) {
-            case 0: textureRegion = Resource.cloud0; break;
-            case 1: textureRegion = Resource.cloud1; break;
-            case 2: textureRegion = Resource.cloud2; break;
-            case 3: textureRegion = Resource.cloud3; break;
-            case 4: textureRegion = Resource.cloud4; break;
-            case 5: textureRegion = Resource.cloud5; break;
-            case 6: textureRegion = Resource.cloud6; break;
-            case 7: textureRegion = Resource.cloud7; break;
-            case 8: textureRegion = Resource.cloud8; break;
-            case 9: textureRegion = Resource.cloud9; break;
-            default: textureRegion = Resource.cloud0; break;
+            case 0: textureRegion = Assets.gamePack.findRegion("cloud0"); break;
+            case 1: textureRegion = Assets.gamePack.findRegion("cloud1"); break;
+            case 2: textureRegion = Assets.gamePack.findRegion("cloud2"); break;
+            case 3: textureRegion = Assets.gamePack.findRegion("cloud3"); break;
+            case 4: textureRegion = Assets.gamePack.findRegion("cloud4"); break;
+            case 5: textureRegion = Assets.gamePack.findRegion("cloud5"); break;
+            case 6: textureRegion = Assets.gamePack.findRegion("cloud6"); break;
+            case 7: textureRegion = Assets.gamePack.findRegion("cloud7"); break;
+            case 8: textureRegion = Assets.gamePack.findRegion("cloud8"); break;
+            case 9: textureRegion = Assets.gamePack.findRegion("cloud9"); break;
+            default: textureRegion = Assets.gamePack.findRegion("cloud0"); break;
         }
         return textureRegion;
     }
